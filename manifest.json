@@ -1,0 +1,40 @@
+{
+  "name": "وصلة",
+  "short_name": "وصلة",
+  "description": "مشاركة روابطك بأناقة",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#0b0b16",
+  "theme_color": "#0b0b16",
+  "orientation": "portrait-primary",
+  "lang": "ar",
+  "dir": "rtl",
+  "categories": ["productivity", "social"],
+  "icons": [
+    {
+      "src": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MTIgNTEyIj4KICA8ZGVmcz4KICAgIDxsaW5lYXJHcmFkaWVudCBpZD0iYmciIHgxPSIwJSIgeTE9IjAlIiB4Mj0iMTAwJSIgeTI9IjEwMCUiPgogICAgICA8c3RvcCBvZmZzZXQ9IjAlIiBzdHlsZT0ic3RvcC1jb2xvcjojMGYwZjFhIi8+CiAgICAgIDxzdG9wIG9mZnNldD0iMTAwJSIgc3R5bGU9InN0b3AtY29sb3I6IzFhMGYyZSIvPgogICAgPC9saW5lYXJHcmFkaWVudD4KICAgIDxsaW5lYXJHcmFkaWVudCBpZD0iYWNjZW50IiB4MT0iMCUiIHkxPSIwJSIgeDI9IjEwMCUiIHkyPSIxMDAlIj4KICAgICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3R5bGU9InN0b3AtY29sb3I6I2M5YTk2ZSIvPgogICAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0eWxlPSJzdG9wLWNvbG9yOiNlOGM4N2EiLz4KICAgIDwvbGluZWFyR3JhZGllbnQ+CiAgICA8bGluZWFyR3JhZGllbnQgaWQ9InJpbmciIHgxPSIwJSIgeTE9IjAlIiB4Mj0iMTAwJSIgeTI9IjEwMCUiPgogICAgICA8c3RvcCBvZmZzZXQ9IjAlIiBzdHlsZT0ic3RvcC1jb2xvcjojYzlhOTZlO3N0b3Atb3BhY2l0eTowLjgiLz4KICAgICAgPHN0b3Agb2Zmc2V0PSIxMDAlIiBzdHlsZT0ic3RvcC1jb2xvcjojZmZmZmZmO3N0b3Atb3BhY2l0eTowLjEiLz4KICAgIDwvbGluZWFyR3JhZGllbnQ+CiAgPC9kZWZzPgogIDxyZWN0IHdpZHRoPSI1MTIiIGhlaWdodD0iNTEyIiByeD0iMTIwIiBmaWxsPSJ1cmwoI2JnKSIvPgogIDxjaXJjbGUgY3g9IjI1NiIgY3k9IjI1NiIgcj0iMjEwIiBmaWxsPSJub25lIiBzdHJva2U9InVybCgjcmluZykiIHN0cm9rZS13aWR0aD0iMiIgb3BhY2l0eT0iMC40Ii8+CiAgPGNpcmNsZSBjeD0iMjU2IiBjeT0iMjU2IiByPSI1MiIgZmlsbD0idXJsKCNhY2NlbnQpIiBvcGFjaXR5PSIwLjk1Ii8+CiAgPHRleHQgeD0iMjU2IiB5PSIyNzIiIGZvbnQtZmFtaWx5PSJzZXJpZiIgZm9udC1zaXplPSI0NCIgZmlsbD0iIzBmMGYxYSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC13ZWlnaHQ9ImJvbGQiPti8PC90ZXh0PgogIDxjaXJjbGUgY3g9IjI1NiIgY3k9IjgwIiByPSIyOCIgZmlsbD0idXJsKCNhY2NlbnQpIiBvcGFjaXR5PSIwLjg1Ii8+CiAgPGNpcmNsZSBjeD0iMjU2IiBjeT0iNDMyIiByPSIyOCIgZmlsbD0idXJsKCNhY2NlbnQpIiBvcGFjaXR5PSIwLjg1Ii8+CiAgPGNpcmNsZSBjeD0iODAiIGN5PSIyNTYiIHI9IjI4IiBmaWxsPSJ1cmwoI2FjY2VudCkiIG9wYWNpdHk9IjAuODUiLz4KICA8Y2lyY2xlIGN4PSI0MzIiIGN5PSIyNTYiIHI9IjI4IiBmaWxsPSJ1cmwoI2FjY2VudCkiIG9wYWNpdHk9IjAuODUiLz4KICA8Y2lyY2xlIGN4PSIxMzkiIGN5PSIxMzkiIHI9IjIwIiBmaWxsPSJ1cmwoI2FjY2VudCkiIG9wYWNpdHk9IjAuNiIvPgogIDxjaXJjbGUgY3g9IjM3MyIgY3k9IjEzOSIgcj0iMjAiIGZpbGw9InVybCgjYWNjZW50KSIgb3BhY2l0eT0iMC42Ii8+CiAgPGNpcmNsZSBjeD0iMTM5IiBjeT0iMzczIiByPSIyMCIgZmlsbD0idXJsKCNhY2NlbnQpIiBvcGFjaXR5PSIwLjYiLz4KICA8Y2lyY2xlIGN4PSIzNzMiIGN5PSIzNzMiIHI9IjIwIiBmaWxsPSJ1cmwoI2FjY2VudCkiIG9wYWNpdHk9IjAuNiIvPgogIDxsaW5lIHgxPSIyNTYiIHkxPSIyNTYiIHgyPSIyNTYiIHkyPSIxMDgiIHN0cm9rZT0iI2M5YTk2ZSIgc3Ryb2tlLXdpZHRoPSIyIiBvcGFjaXR5PSIwLjUiLz4KICA8bGluZSB4MT0iMjU2IiB5MT0iMjU2IiB4Mj0iMjU2IiB5Mj0iNDA0IiBzdHJva2U9IiNjOWE5NmUiIHN0cm9rZS13aWR0aD0iMiIgb3BhY2l0eT0iMC41Ii8+CiAgPGxpbmUgeDE9IjI1NiIgeTE9IjI1NiIgeDI9IjEwOCIgeTI9IjI1NiIgc3Ryb2tlPSIjYzlhOTZlIiBzdHJva2Utd2lkdGg9IjIiIG9wYWNpdHk9IjAuNSIvPgogIDxsaW5lIHgxPSIyNTYiIHkxPSIyNTYiIHgyPSI0MDQiIHkyPSIyNTYiIHN0cm9rZT0iI2M5YTk2ZSIgc3Ryb2tlLXdpZHRoPSIyIiBvcGFjaXR5PSIwLjUiLz4KPC9zdmc+",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icon.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "screenshots": [],
+  "shortcuts": [
+    {
+      "name": "تعديل الروابط",
+      "url": "./index.html?tab=admin",
+      "description": "إدارة روابطك"
+    },
+    {
+      "name": "الإحصائيات",
+      "url": "./index.html?tab=analytics",
+      "description": "عرض التحليلات"
+    }
+  ]
+}
