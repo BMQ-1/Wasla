@@ -34,9 +34,10 @@
     --radius-sm: 10px;
     --shadow: 0 8px 40px rgba(0,0,0,0.6);
     --shadow-gold: 0 0 30px rgba(201,169,110,0.15);
+    --shadow-gold-btn: rgba(201,169,110,0.3);
   }
 
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
 
   html { scroll-behavior: smooth; }
 
@@ -50,17 +51,21 @@
     direction: rtl;
   }
 
-  /* ─── APP SHELL ─── */
+  /* ─── APP SHELL & ANIMATIONS ─── */
   #app { min-height: 100vh; display: flex; flex-direction: column; }
 
-  /* ─── PAGES ─── */
-  .page { display: none; flex-direction: column; min-height: 100vh; }
+  .page { display: none; flex-direction: column; min-height: 100vh; animation: fadeInPage 0.35s ease-out forwards; }
   .page.active { display: flex; }
+
+  @keyframes fadeInPage {
+    from { opacity: 0; transform: translateY(15px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
 
   /* ─── BACKGROUND DECORATION ─── */
   .bg-orb {
     position: fixed; border-radius: 50%; pointer-events: none; z-index: 0;
-    filter: blur(80px); opacity: 0.08;
+    filter: blur(80px); opacity: 0.08; transition: background 0.5s;
   }
   .bg-orb-1 { width: 400px; height: 400px; background: var(--gold); top: -120px; right: -100px; }
   .bg-orb-2 { width: 300px; height: 300px; background: #6e4fc9; bottom: 80px; left: -80px; }
@@ -77,14 +82,10 @@
     display: flex; align-items: center; justify-content: space-between;
   }
   .nav-logo {
-    font-family: 'Amiri', serif;
-    font-size: 1.7rem;
-    font-weight: 700;
+    font-family: 'Amiri', serif; font-size: 1.7rem; font-weight: 700;
     background: linear-gradient(135deg, var(--gold), var(--gold2));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    letter-spacing: 0.02em;
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text; letter-spacing: 0.02em;
   }
   .nav-tabs { display: flex; gap: 6px; }
   .nav-tab {
@@ -93,11 +94,9 @@
     font-family: 'Noto Naskh Arabic', serif; font-size: 0.82rem;
     cursor: pointer; transition: all 0.2s;
   }
-  .nav-tab.active {
-    background: var(--gold-dim); border-color: var(--border);
-    color: var(--gold); font-weight: 600;
-  }
+  .nav-tab.active { background: var(--gold-dim); border-color: var(--border); color: var(--gold); font-weight: 600; }
   .nav-tab:hover:not(.active) { color: var(--text); border-color: var(--border); }
+  .nav-tab:active { transform: scale(0.95); }
 
   /* ─── HERO / PROFILE VIEW ─── */
   .profile-page { align-items: center; padding: 0 0 80px 0; }
@@ -107,38 +106,23 @@
     display: flex; flex-direction: column; align-items: center; gap: 16px;
     position: relative; z-index: 1;
   }
-  .profile-avatar-wrap {
-    position: relative; width: 108px; height: 108px;
-  }
+  .profile-avatar-wrap { position: relative; width: 108px; height: 108px; }
   .avatar-ring {
     position: absolute; inset: -5px; border-radius: 50%;
     background: conic-gradient(var(--gold), var(--gold2), var(--gold));
-    animation: spinRing 8s linear infinite;
-    opacity: 0.8;
+    animation: spinRing 8s linear infinite; opacity: 0.8;
   }
-  @keyframes spinRing {
-    to { transform: rotate(360deg); }
-  }
+  @keyframes spinRing { to { transform: rotate(360deg); } }
   .profile-avatar {
     position: relative; width: 108px; height: 108px; border-radius: 50%;
     background: var(--surface2); border: 3px solid var(--bg);
     display: flex; align-items: center; justify-content: center;
-    font-size: 2.8rem; overflow: hidden; z-index: 1;
-    box-shadow: var(--shadow);
+    font-size: 2.8rem; overflow: hidden; z-index: 1; box-shadow: var(--shadow);
   }
   .profile-avatar img { width: 100%; height: 100%; object-fit: cover; }
-  .profile-name {
-    font-family: 'Amiri', serif; font-size: 1.9rem; font-weight: 700;
-    text-align: center; line-height: 1.2;
-  }
-  .profile-handle {
-    font-size: 0.85rem; color: var(--gold); letter-spacing: 0.04em;
-    direction: ltr;
-  }
-  .profile-bio {
-    font-size: 0.92rem; color: var(--text-dim); text-align: center;
-    max-width: 320px; line-height: 1.8;
-  }
+  .profile-name { font-family: 'Amiri', serif; font-size: 1.9rem; font-weight: 700; text-align: center; line-height: 1.2; }
+  .profile-handle { font-size: 0.85rem; color: var(--gold); letter-spacing: 0.04em; direction: ltr; }
+  .profile-bio { font-size: 0.92rem; color: var(--text-dim); text-align: center; max-width: 320px; line-height: 1.8; }
 
   /* Stats strip */
   .stats-strip {
@@ -151,25 +135,23 @@
     flex: 1; background: var(--surface); padding: 12px 8px;
     text-align: center; display: flex; flex-direction: column; gap: 2px;
   }
-  .stat-num {
-    font-family: 'Amiri', serif; font-size: 1.3rem;
-    color: var(--gold); font-weight: 700;
-  }
+  .stat-num { font-family: 'Amiri', serif; font-size: 1.3rem; color: var(--gold); font-weight: 700; }
   .stat-label { font-size: 0.7rem; color: var(--text-faint); }
 
   /* Social icons row */
   .social-row {
     display: flex; gap: 10px; flex-wrap: wrap; justify-content: center;
-    padding: 0 24px; max-width: 420px; width: 100%;
+    padding: 0 24px; max-width: 420px; width: 100%; margin-top: 16px;
   }
   .social-pill {
     display: flex; align-items: center; gap: 6px;
     background: var(--surface); border: 1px solid var(--border);
     border-radius: 30px; padding: 8px 14px;
     text-decoration: none; color: var(--text-dim);
-    font-size: 0.78rem; transition: all 0.2s;
+    font-size: 0.78rem; transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
   }
-  .social-pill:hover { border-color: var(--gold); color: var(--gold); transform: translateY(-2px); }
+  .social-pill:hover { border-color: var(--gold); color: var(--gold); transform: translateY(-3px); }
+  .social-pill:active { transform: scale(0.92); }
   .social-pill svg { width: 14px; height: 14px; flex-shrink: 0; }
 
   /* Links list */
@@ -179,41 +161,30 @@
     position: relative; z-index: 1;
   }
 
-  .section-label {
-    font-size: 0.72rem; color: var(--text-faint); letter-spacing: 0.12em;
-    text-align: center; margin: 4px 0 -2px;
-  }
-
   .link-card {
     display: flex; align-items: center; gap: 14px;
     background: var(--surface); border: 1px solid var(--border);
     border-radius: var(--radius); padding: 16px 18px;
     text-decoration: none; color: var(--text);
-    transition: all 0.25s cubic-bezier(.4,0,.2,1);
-    position: relative; overflow: hidden;
-    cursor: pointer;
+    transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s, border-color 0.2s;
+    position: relative; overflow: hidden; cursor: pointer;
   }
   .link-card::before {
     content: ''; position: absolute; inset: 0;
-    background: linear-gradient(135deg, transparent, rgba(201,169,110,0.05));
-    opacity: 0; transition: opacity 0.2s;
+    background: linear-gradient(135deg, transparent, var(--gold-dim));
+    opacity: 0; transition: opacity 0.2s; pointer-events: none;
   }
-  .link-card:hover {
-    transform: translateY(-3px) scale(1.01);
-    border-color: rgba(201,169,110,0.45);
-    box-shadow: var(--shadow-gold);
-  }
+  .link-card:hover { border-color: var(--gold); box-shadow: var(--shadow-gold); transform: translateY(-3px) scale(1.01); }
   .link-card:hover::before { opacity: 1; }
-  .link-card:active { transform: scale(0.98); }
+  .link-card:active { transform: scale(0.96); }
 
   .link-icon {
     width: 44px; height: 44px; border-radius: 12px;
     background: var(--surface2); border: 1px solid var(--border);
     display: flex; align-items: center; justify-content: center;
-    font-size: 1.3rem; flex-shrink: 0;
-    transition: transform 0.2s;
+    font-size: 1.3rem; flex-shrink: 0; transition: transform 0.25s;
   }
-  .link-card:hover .link-icon { transform: scale(1.08) rotate(-3deg); }
+  .link-card:hover .link-icon { transform: scale(1.1) rotate(-5deg); }
 
   .link-info { flex: 1; min-width: 0; }
   .link-title { font-size: 0.98rem; font-weight: 600; margin-bottom: 2px; }
@@ -222,63 +193,40 @@
   .link-arrow { color: var(--text-faint); transition: all 0.2s; flex-shrink: 0; }
   .link-card:hover .link-arrow { color: var(--gold); transform: translateX(-4px); }
 
-  /* Click counter badge */
-  .click-badge {
-    position: absolute; top: 10px; left: 14px;
-    font-size: 0.65rem; color: var(--text-faint);
-    direction: ltr;
-  }
+  .click-badge { position: absolute; top: 10px; left: 14px; font-size: 0.65rem; color: var(--text-faint); direction: ltr; }
 
   /* ─── ADMIN PAGE ─── */
   .admin-page { padding: 0 0 100px 0; }
 
-  .admin-header {
-    padding: 24px 20px 16px;
-    display: flex; flex-direction: column; gap: 6px;
-  }
-  .admin-title {
-    font-family: 'Amiri', serif; font-size: 1.5rem; color: var(--gold);
-  }
+  .admin-header { padding: 24px 20px 16px; display: flex; flex-direction: column; gap: 6px; }
+  .admin-title { font-family: 'Amiri', serif; font-size: 1.5rem; color: var(--gold); }
   .admin-subtitle { font-size: 0.8rem; color: var(--text-dim); }
 
-  /* Section cards */
   .admin-section {
-    margin: 0 16px 16px;
-    background: var(--surface); border: 1px solid var(--border);
+    margin: 0 16px 16px; background: var(--surface); border: 1px solid var(--border);
     border-radius: var(--radius); overflow: hidden;
   }
   .admin-section-title {
-    padding: 14px 18px 10px;
-    font-size: 0.75rem; font-weight: 600;
+    padding: 14px 18px 10px; font-size: 0.75rem; font-weight: 600;
     color: var(--gold); letter-spacing: 0.08em;
-    border-bottom: 1px solid var(--border);
-    background: var(--gold-dim);
+    border-bottom: 1px solid var(--border); background: var(--gold-dim);
   }
 
-  /* Form controls */
   .form-group { padding: 14px 18px; border-bottom: 1px solid var(--border); }
   .form-group:last-child { border-bottom: none; }
-  .form-label {
-    display: block; font-size: 0.78rem; color: var(--text-dim);
-    margin-bottom: 7px; font-weight: 600;
-  }
+  .form-label { display: block; font-size: 0.78rem; color: var(--text-dim); margin-bottom: 7px; font-weight: 600; }
   .form-input, .form-textarea, .form-select {
     width: 100%; background: var(--surface2); border: 1px solid var(--border);
     border-radius: var(--radius-sm); padding: 10px 14px;
     color: var(--text); font-family: 'Noto Naskh Arabic', serif;
-    font-size: 0.9rem; transition: border-color 0.2s; direction: rtl;
+    font-size: 0.9rem; transition: border-color 0.2s, box-shadow 0.2s;
   }
-  .form-input:focus, .form-textarea:focus, .form-select:focus {
-    outline: none; border-color: var(--gold);
-  }
+  .form-input:focus, .form-textarea:focus { outline: none; border-color: var(--gold); box-shadow: var(--shadow-gold); }
+  .form-input[dir="ltr"], .form-textarea[dir="ltr"] { direction: ltr !important; text-align: left; }
   .form-textarea { resize: vertical; min-height: 70px; }
-  .form-select { cursor: pointer; }
-  .form-select option { background: var(--surface2); }
 
   /* Avatar upload */
-  .avatar-upload-area {
-    display: flex; align-items: center; gap: 16px; padding: 14px 18px;
-  }
+  .avatar-upload-area { display: flex; align-items: center; gap: 16px; padding: 14px 18px; }
   .avatar-preview {
     width: 64px; height: 64px; border-radius: 50%;
     background: var(--surface2); border: 2px solid var(--border);
@@ -290,17 +238,18 @@
     flex: 1; background: var(--gold-dim); border: 1px dashed var(--border);
     border-radius: var(--radius-sm); padding: 10px;
     color: var(--gold); font-family: 'Noto Naskh Arabic', serif;
-    font-size: 0.82rem; cursor: pointer; text-align: center;
+    font-size: 0.82rem; cursor: pointer; text-align: center; transition: all 0.2s;
   }
   .avatar-upload-btn:hover { border-color: var(--gold); }
+  .avatar-upload-btn:active { transform: scale(0.96); }
 
   /* Link editor */
   .link-editor-list { padding: 8px; display: flex; flex-direction: column; gap: 8px; }
   .link-editor-item {
     background: var(--surface2); border: 1px solid var(--border);
     border-radius: var(--radius-sm); padding: 12px 14px;
-    display: flex; flex-direction: column; gap: 8px;
-    position: relative;
+    display: flex; flex-direction: column; gap: 10px; position: relative;
+    transition: transform 0.2s;
   }
   .link-editor-row { display: flex; gap: 8px; align-items: center; }
   .link-editor-row .form-input { flex: 1; }
@@ -308,105 +257,99 @@
     width: 48px; height: 38px; background: var(--surface);
     border: 1px solid var(--border); border-radius: var(--radius-sm);
     font-size: 1.3rem; cursor: pointer; flex-shrink: 0;
-    display: flex; align-items: center; justify-content: center;
+    display: flex; align-items: center; justify-content: center; transition: all 0.2s;
   }
+  .link-emoji-picker:active { transform: scale(0.9); }
+  
+  .link-editor-controls { display: flex; align-items: center; justify-content: space-between; margin-top: 4px; }
+  .reorder-btns { display: flex; gap: 6px; }
+  .icon-btn { 
+    width: 30px; height: 30px; border-radius: 8px; 
+    background: var(--surface); border: 1px solid var(--border); 
+    color: var(--text-dim); display: flex; align-items: center; justify-content: center;
+    cursor: pointer; transition: all 0.2s; font-size: 1.1rem;
+  }
+  .icon-btn:hover { color: var(--gold); border-color: var(--gold); }
+  .icon-btn:active { transform: scale(0.85); }
+  .icon-btn:disabled { opacity: 0.3; pointer-events: none; }
+
   .delete-btn {
-    width: 32px; height: 32px; border-radius: 50%;
+    width: 32px; height: 32px; border-radius: 8px;
     background: rgba(224,92,92,0.1); border: 1px solid rgba(224,92,92,0.3);
     color: var(--danger); font-size: 1rem; cursor: pointer;
     display: flex; align-items: center; justify-content: center;
     flex-shrink: 0; transition: all 0.2s; line-height: 1;
   }
-  .delete-btn:hover { background: rgba(224,92,92,0.25); }
+  .delete-btn:hover { background: rgba(224,92,92,0.25); transform: scale(1.05); }
+  .delete-btn:active { transform: scale(0.9); }
 
-  .toggle-row {
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 12px 18px;
-  }
+  .toggle-row { display: flex; align-items: center; justify-content: space-between; padding: 12px 18px; }
   .toggle-label { font-size: 0.85rem; }
   .toggle {
     width: 44px; height: 24px; background: var(--surface2);
     border: 1px solid var(--border); border-radius: 12px;
-    position: relative; cursor: pointer; transition: background 0.2s;
+    position: relative; cursor: pointer; transition: background 0.2s, border-color 0.2s;
     flex-shrink: 0;
   }
   .toggle.on { background: var(--gold); border-color: var(--gold); }
   .toggle::after {
     content: ''; position: absolute; top: 3px; right: 3px;
-    width: 16px; height: 16px; border-radius: 50%;
-    background: white; transition: right 0.2s;
-    box-shadow: 0 1px 4px rgba(0,0,0,0.3);
+    width: 16px; height: 16px; border-radius: 50%; background: white; 
+    transition: right 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); box-shadow: 0 1px 4px rgba(0,0,0,0.3);
   }
   .toggle.on::after { right: calc(100% - 19px); }
 
   /* Buttons */
   .btn {
     display: inline-flex; align-items: center; justify-content: center; gap: 8px;
-    padding: 12px 24px; border-radius: 30px;
+    padding: 12px 24px; border-radius: 30px; border: none;
     font-family: 'Noto Naskh Arabic', serif; font-size: 0.9rem; font-weight: 600;
-    cursor: pointer; transition: all 0.2s; border: none;
+    cursor: pointer; transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
   }
   .btn-gold {
     background: linear-gradient(135deg, var(--gold), var(--gold2));
-    color: #0f0f1a;
-    box-shadow: 0 4px 20px rgba(201,169,110,0.3);
+    color: #0f0f1a; box-shadow: 0 4px 20px var(--shadow-gold-btn);
   }
-  .btn-gold:hover { transform: translateY(-2px); box-shadow: 0 6px 28px rgba(201,169,110,0.45); }
-  .btn-ghost {
-    background: transparent; border: 1px solid var(--border);
-    color: var(--text-dim);
-  }
+  .btn-gold:hover { transform: translateY(-2px); box-shadow: 0 6px 28px var(--shadow-gold-btn); }
+  .btn-gold:active { transform: scale(0.96); }
+  .btn-ghost { background: transparent; border: 1px solid var(--border); color: var(--text-dim); }
   .btn-ghost:hover { border-color: var(--gold); color: var(--gold); }
+  .btn-ghost:active { transform: scale(0.96); }
   .btn-sm { padding: 8px 16px; font-size: 0.8rem; }
   .btn-full { width: 100%; }
 
-  .action-bar {
-    padding: 16px; display: flex; gap: 10px; flex-wrap: wrap;
-  }
+  .action-bar { padding: 16px; display: flex; gap: 10px; flex-wrap: wrap; }
 
-  /* Add link button */
   .add-link-btn {
     margin: 0 16px; display: flex; align-items: center; justify-content: center;
-    gap: 8px; padding: 14px;
-    background: var(--gold-dim); border: 1px dashed rgba(201,169,110,0.4);
-    border-radius: var(--radius); color: var(--gold);
+    gap: 8px; padding: 14px; background: var(--gold-dim); 
+    border: 1px dashed var(--border); border-radius: var(--radius); color: var(--gold);
     font-family: 'Noto Naskh Arabic', serif; font-size: 0.88rem;
     cursor: pointer; transition: all 0.2s;
   }
-  .add-link-btn:hover { background: rgba(201,169,110,0.18); border-color: var(--gold); }
+  .add-link-btn:hover { background: rgba(201,169,110,0.18); border-color: var(--gold); transform: translateY(-2px); }
+  .add-link-btn:active { transform: scale(0.98); }
 
   /* ─── ANALYTICS PAGE ─── */
   .analytics-page { padding: 0 0 80px; }
-
   .analytics-header { padding: 24px 20px 0; }
   .analytics-title { font-family: 'Amiri', serif; font-size: 1.5rem; color: var(--gold); margin-bottom: 4px; }
 
-  .analytics-grid {
-    display: grid; grid-template-columns: 1fr 1fr; gap: 12px;
-    padding: 16px;
-  }
+  .analytics-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; padding: 16px; }
   .kpi-card {
     background: var(--surface); border: 1px solid var(--border);
     border-radius: var(--radius); padding: 18px 16px;
-    display: flex; flex-direction: column; gap: 4px;
-    position: relative; overflow: hidden;
+    display: flex; flex-direction: column; gap: 4px; position: relative; overflow: hidden;
   }
   .kpi-card::after {
     content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 3px;
-    background: linear-gradient(90deg, var(--gold), var(--gold2));
-    opacity: 0.4;
+    background: linear-gradient(90deg, var(--gold), var(--gold2)); opacity: 0.4;
   }
-  .kpi-value {
-    font-family: 'Amiri', serif; font-size: 2rem; color: var(--gold); font-weight: 700;
-  }
+  .kpi-value { font-family: 'Amiri', serif; font-size: 2rem; color: var(--gold); font-weight: 700; }
   .kpi-label { font-size: 0.72rem; color: var(--text-dim); }
-  .kpi-change { font-size: 0.7rem; margin-top: 4px; }
-  .kpi-change.up { color: var(--success); }
-  .kpi-change.down { color: var(--danger); }
 
   .chart-card {
-    margin: 0 16px 16px;
-    background: var(--surface); border: 1px solid var(--border);
+    margin: 0 16px 16px; background: var(--surface); border: 1px solid var(--border);
     border-radius: var(--radius); padding: 18px;
   }
   .chart-title { font-size: 0.82rem; color: var(--text-dim); margin-bottom: 14px; font-weight: 600; }
@@ -414,23 +357,18 @@
   .chart-bar-wrap { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px; }
   .chart-bar {
     width: 100%; border-radius: 4px 4px 0 0;
-    background: linear-gradient(180deg, var(--gold2), var(--gold));
-    opacity: 0.7; min-height: 4px; transition: opacity 0.2s;
+    background: linear-gradient(180deg, var(--gold2), var(--gold)); opacity: 0.7; 
+    min-height: 4px; transition: opacity 0.2s, height 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
   }
   .chart-bar:hover { opacity: 1; }
   .chart-bar-label { font-size: 0.6rem; color: var(--text-faint); }
 
   .top-links-list { display: flex; flex-direction: column; }
-  .top-link-row {
-    display: flex; align-items: center; gap: 12px;
-    padding: 12px 18px; border-bottom: 1px solid var(--border);
-  }
+  .top-link-row { display: flex; align-items: center; gap: 12px; padding: 12px 18px; border-bottom: 1px solid var(--border); }
   .top-link-row:last-child { border-bottom: none; }
   .top-link-rank {
-    width: 24px; height: 24px; border-radius: 50%;
-    background: var(--gold-dim); border: 1px solid var(--border);
-    display: flex; align-items: center; justify-content: center;
-    font-size: 0.7rem; color: var(--gold); flex-shrink: 0;
+    width: 24px; height: 24px; border-radius: 50%; background: var(--gold-dim); border: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: center; font-size: 0.7rem; color: var(--gold); flex-shrink: 0;
   }
   .top-link-name { flex: 1; font-size: 0.85rem; }
   .top-link-clicks { font-size: 0.78rem; color: var(--gold); font-family: 'Amiri', serif; }
@@ -440,176 +378,155 @@
   .progress-info { display: flex; justify-content: space-between; }
   .progress-label { font-size: 0.78rem; color: var(--text-dim); }
   .progress-value { font-size: 0.75rem; color: var(--gold); }
-  .progress-bar-track {
-    height: 6px; background: var(--surface2); border-radius: 3px; overflow: hidden;
-  }
+  .progress-bar-track { height: 6px; background: var(--surface2); border-radius: 3px; overflow: hidden; }
   .progress-bar-fill {
-    height: 100%; border-radius: 3px;
-    background: linear-gradient(90deg, var(--gold), var(--gold2));
+    height: 100%; border-radius: 3px; background: linear-gradient(90deg, var(--gold), var(--gold2));
+    transition: width 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
   }
 
   /* ─── SHARE PAGE ─── */
   .share-page { align-items: center; padding: 30px 20px 80px; }
-  .share-page .section-title {
-    font-family: 'Amiri', serif; font-size: 1.5rem; color: var(--gold);
-    text-align: center; margin-bottom: 6px;
-  }
+  .share-page .section-title { font-family: 'Amiri', serif; font-size: 1.5rem; color: var(--gold); text-align: center; margin-bottom: 6px; }
   .share-page .section-sub { font-size: 0.82rem; color: var(--text-dim); text-align: center; margin-bottom: 28px; }
 
   .qr-wrap {
     background: white; border-radius: 20px; padding: 20px;
-    box-shadow: var(--shadow-gold); margin-bottom: 24px;
-    position: relative; z-index: 1;
+    box-shadow: var(--shadow-gold); margin-bottom: 24px; position: relative; z-index: 1;
   }
   .qr-canvas { display: block; }
 
   .share-url-box {
-    width: 100%; max-width: 380px;
-    background: var(--surface); border: 1px solid var(--border);
-    border-radius: var(--radius); padding: 14px 18px;
-    display: flex; align-items: center; gap: 12px; margin-bottom: 20px;
+    width: 100%; max-width: 380px; background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 14px 18px; display: flex; align-items: center; gap: 12px; margin-bottom: 20px;
   }
   .share-url { flex: 1; font-size: 0.82rem; color: var(--text-dim); word-break: break-all; direction: ltr; text-align: left; }
   .copy-btn {
-    background: var(--gold-dim); border: 1px solid var(--border);
-    border-radius: 8px; padding: 7px 12px;
-    color: var(--gold); font-family: 'Noto Naskh Arabic', serif;
-    font-size: 0.78rem; cursor: pointer; white-space: nowrap; transition: all 0.2s;
+    background: var(--gold-dim); border: 1px solid var(--border); border-radius: 8px; padding: 7px 12px;
+    color: var(--gold); font-family: 'Noto Naskh Arabic', serif; font-size: 0.78rem; cursor: pointer; white-space: nowrap; transition: all 0.2s;
   }
   .copy-btn:hover { background: rgba(201,169,110,0.25); }
+  .copy-btn:active { transform: scale(0.9); }
   .copy-btn.copied { color: var(--success); border-color: var(--success); }
 
-  .share-grid {
-    display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;
-    width: 100%; max-width: 380px; margin-bottom: 24px;
-  }
+  .share-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; width: 100%; max-width: 380px; margin-bottom: 24px; }
   .share-option {
-    background: var(--surface); border: 1px solid var(--border);
-    border-radius: var(--radius); padding: 16px 8px;
+    background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px 8px;
     display: flex; flex-direction: column; align-items: center; gap: 7px;
-    cursor: pointer; transition: all 0.2s; color: var(--text);
-    font-size: 0.72rem; color: var(--text-dim);
+    cursor: pointer; transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1); font-size: 0.72rem; color: var(--text-dim);
   }
-  .share-option:hover { border-color: var(--gold); transform: translateY(-2px); }
+  .share-option:hover { border-color: var(--gold); transform: translateY(-3px); color: var(--text); }
+  .share-option:active { transform: scale(0.95); }
   .share-option-icon { font-size: 1.6rem; }
 
   /* ─── TOAST ─── */
   .toast {
     position: fixed; bottom: 90px; left: 50%; transform: translateX(-50%) translateY(20px);
     background: var(--surface); border: 1px solid var(--border);
-    border-radius: 30px; padding: 10px 22px;
-    font-size: 0.85rem; color: var(--text);
-    box-shadow: var(--shadow); z-index: 1000;
-    opacity: 0; transition: all 0.3s; pointer-events: none;
-    white-space: nowrap;
+    border-radius: 30px; padding: 10px 22px; font-size: 0.85rem; color: var(--text);
+    box-shadow: var(--shadow); z-index: 1000; opacity: 0; pointer-events: none;
+    transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1); white-space: nowrap;
   }
   .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
   /* ─── BOTTOM NAV ─── */
   .bottom-nav {
     position: fixed; bottom: 0; left: 0; right: 0; z-index: 100;
-    background: rgba(11,11,22,0.92); backdrop-filter: blur(24px);
-    -webkit-backdrop-filter: blur(24px);
-    border-top: 1px solid var(--border);
-    display: flex; padding: 10px 20px calc(10px + env(safe-area-inset-bottom));
-    gap: 4px;
+    background: rgba(11,11,22,0.92); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
+    border-top: 1px solid var(--border); display: flex; padding: 10px 20px calc(10px + env(safe-area-inset-bottom)); gap: 4px;
   }
   .bottom-nav-item {
     flex: 1; display: flex; flex-direction: column; align-items: center;
-    gap: 4px; padding: 6px 4px; border-radius: var(--radius-sm);
-    cursor: pointer; transition: all 0.2s; border: none; background: none;
-    color: var(--text-faint); font-family: 'Noto Naskh Arabic', serif;
+    gap: 4px; padding: 6px 4px; border-radius: var(--radius-sm); border: none; background: none;
+    cursor: pointer; transition: color 0.2s; color: var(--text-faint); font-family: 'Noto Naskh Arabic', serif;
   }
+  .bottom-nav-item svg { width: 22px; height: 22px; transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); }
   .bottom-nav-item.active { color: var(--gold); }
-  .bottom-nav-item svg { width: 22px; height: 22px; }
+  .bottom-nav-item.active svg { transform: scale(1.15); stroke-width: 2.2; }
   .bottom-nav-label { font-size: 0.65rem; }
 
   /* ─── MODAL ─── */
   .modal-overlay {
-    position: fixed; inset: 0; background: rgba(0,0,0,0.7);
-    backdrop-filter: blur(8px); z-index: 200;
+    position: fixed; inset: 0; background: rgba(0,0,0,0.7); backdrop-filter: blur(8px); z-index: 200;
     display: flex; align-items: flex-end; justify-content: center;
-    opacity: 0; pointer-events: none; transition: opacity 0.25s;
+    opacity: 0; pointer-events: none; transition: opacity 0.3s;
   }
   .modal-overlay.open { opacity: 1; pointer-events: all; }
   .modal-sheet {
-    background: var(--surface2); border-radius: 24px 24px 0 0;
-    border: 1px solid var(--border); border-bottom: none;
-    width: 100%; max-width: 540px; padding: 24px 20px 40px;
-    transform: translateY(100%); transition: transform 0.3s cubic-bezier(.4,0,.2,1);
+    background: var(--surface2); border-radius: 24px 24px 0 0; border: 1px solid var(--border); border-bottom: none;
+    width: 100%; max-width: 540px; padding: 24px 20px calc(40px + env(safe-area-inset-bottom));
+    transform: translateY(100%); transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
   }
   .modal-overlay.open .modal-sheet { transform: translateY(0); }
   .modal-handle { width: 40px; height: 4px; border-radius: 2px; background: var(--border); margin: 0 auto 20px; }
   .modal-title { font-family: 'Amiri', serif; font-size: 1.3rem; color: var(--gold); margin-bottom: 16px; text-align: center; }
-  .emoji-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; margin-bottom: 16px; }
+  .emoji-grid { 
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(44px, 1fr)); 
+    gap: 8px; margin-bottom: 16px; max-height: 40vh; overflow-y: auto; padding: 4px;
+  }
   .emoji-opt {
-    width: 100%; aspect-ratio: 1; border-radius: 8px;
-    background: var(--surface); border: 1px solid var(--border);
-    font-size: 1.3rem; cursor: pointer; transition: all 0.15s;
-    display: flex; align-items: center; justify-content: center;
+    width: 100%; aspect-ratio: 1; border-radius: 8px; background: var(--surface); border: 1px solid var(--border);
+    font-size: 1.3rem; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: center;
   }
   .emoji-opt:hover { border-color: var(--gold); transform: scale(1.1); }
+  .emoji-opt:active { transform: scale(0.9); }
 
   /* ─── LOCK SCREEN ─── */
   .lock-screen {
-    position: fixed; inset: 0; background: var(--bg);
-    z-index: 500; display: flex; flex-direction: column;
-    align-items: center; justify-content: center; gap: 24px;
-    padding: 40px 24px;
+    position: fixed; inset: 0; background: var(--bg); z-index: 500; display: flex; flex-direction: column;
+    align-items: center; justify-content: center; gap: 24px; padding: 40px 24px;
   }
   .lock-logo {
-    font-family: 'Amiri', serif; font-size: 3rem;
-    background: linear-gradient(135deg, var(--gold), var(--gold2));
-    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-    background-clip: text;
+    font-family: 'Amiri', serif; font-size: 3rem; background: linear-gradient(135deg, var(--gold), var(--gold2));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
   }
   .lock-subtitle { font-size: 0.9rem; color: var(--text-dim); text-align: center; }
   .pin-dots { display: flex; gap: 16px; }
   .pin-dot {
-    width: 14px; height: 14px; border-radius: 50%;
-    border: 2px solid var(--border); transition: all 0.15s;
+    width: 16px; height: 16px; border-radius: 50%; border: 2px solid var(--border); 
+    transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
   }
-  .pin-dot.filled { background: var(--gold); border-color: var(--gold); }
+  .pin-dot.filled { background: var(--gold); border-color: var(--gold); transform: scale(1.2); }
   .pin-keypad { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; width: 240px; }
   .pin-key {
-    aspect-ratio: 1; border-radius: 50%;
-    background: var(--surface); border: 1px solid var(--border);
-    color: var(--text); font-family: 'Amiri', serif; font-size: 1.4rem;
-    cursor: pointer; transition: all 0.15s; display: flex;
-    align-items: center; justify-content: center;
+    aspect-ratio: 1; border-radius: 50%; background: var(--surface); border: 1px solid var(--border);
+    color: var(--text); font-family: 'Amiri', serif; font-size: 1.4rem; cursor: pointer; transition: all 0.15s;
+    display: flex; align-items: center; justify-content: center;
   }
   .pin-key:hover { background: var(--surface2); border-color: var(--gold); }
-  .pin-key:active { transform: scale(0.9); }
+  .pin-key:active { transform: scale(0.85); background: var(--gold-dim); }
   .pin-key.empty { background: transparent; border: none; cursor: default; }
-  .lock-error { color: var(--danger); font-size: 0.82rem; min-height: 20px; }
+  .lock-error { color: var(--danger); font-size: 0.82rem; min-height: 20px; transition: opacity 0.2s; }
+  
+  @keyframes shakeError {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-8px); }
+    75% { transform: translateX(8px); }
+  }
+  .shake { animation: shakeError 0.3s ease-in-out; }
 
   /* ─── INSTALL BANNER ─── */
   .install-banner {
-    margin: 12px 16px 0; background: linear-gradient(135deg, rgba(201,169,110,0.12), rgba(201,169,110,0.06));
-    border: 1px solid rgba(201,169,110,0.3); border-radius: var(--radius);
-    padding: 14px 16px; display: flex; align-items: center; gap: 12px;
-    position: relative; z-index: 1;
+    margin: 12px 16px 0; background: linear-gradient(135deg, var(--gold-dim), rgba(0,0,0,0));
+    border: 1px solid var(--border); border-radius: var(--radius); padding: 14px 16px; 
+    display: flex; align-items: center; gap: 12px; position: relative; z-index: 1;
   }
   .install-icon { font-size: 1.6rem; flex-shrink: 0; }
   .install-text { flex: 1; }
   .install-text strong { font-size: 0.85rem; display: block; }
   .install-text span { font-size: 0.74rem; color: var(--text-dim); }
   .install-close {
-    background: none; border: none; color: var(--text-faint);
-    font-size: 1.2rem; cursor: pointer; padding: 4px; flex-shrink: 0;
+    background: none; border: none; color: var(--text-faint); font-size: 1.2rem; 
+    cursor: pointer; padding: 4px; flex-shrink: 0; transition: color 0.2s;
   }
+  .install-close:active { transform: scale(0.8); color: var(--text); }
 
   /* ─── THEME SWITCHER ─── */
   .theme-chips { display: flex; gap: 8px; flex-wrap: wrap; padding: 14px 18px; }
   .theme-chip {
-    width: 32px; height: 32px; border-radius: 50%;
-    cursor: pointer; border: 2px solid transparent; transition: all 0.2s;
+    width: 32px; height: 32px; border-radius: 50%; cursor: pointer; border: 2px solid transparent; 
+    transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
   }
-  .theme-chip.active { border-color: var(--text); transform: scale(1.15); }
-
-  /* ─── LINK DRAG REORDER ─── */
-  .dragging { opacity: 0.5; }
-  .drag-over { border-color: var(--gold) !important; }
+  .theme-chip.active { border-color: var(--text); transform: scale(1.2); box-shadow: 0 4px 10px rgba(0,0,0,0.5); }
 
   /* ─── RESPONSIVE ─── */
   @media (min-width: 540px) {
@@ -681,7 +598,7 @@
         <strong>ثبّت التطبيق</strong>
         <span>اضغط لإضافة وصلة إلى شاشتك الرئيسية</span>
       </div>
-      <button class="install-close" onclick="dismissInstall()">✕</button>
+      <button class="install-close" onclick="dismissInstall(event)">✕</button>
     </div>
 
     <div class="stats-strip" id="statsStrip">
@@ -708,7 +625,7 @@
       <div class="avatar-upload-area">
         <div class="avatar-preview" id="adminAvatarPreview">🌟</div>
         <label class="avatar-upload-btn">
-          📸 رفع صورة أو اختيار رمز تعبيري
+          📸 رفع صورة 
           <input type="file" id="avatarFileInput" accept="image/*" style="display:none" onchange="handleAvatarUpload(event)"/>
         </label>
         <button class="btn btn-ghost btn-sm" onclick="openEmojiPickerFor('avatar')">🎭</button>
@@ -772,15 +689,15 @@
         <label class="form-label">لون الإبراز</label>
         <div class="theme-chips" id="themeChips">
           <div class="theme-chip active" style="background:linear-gradient(135deg,#c9a96e,#e8c87a)" data-theme="gold" onclick="setTheme('gold',this)"></div>
-          <div class="theme-chip" style="background:linear-gradient(135deg,#7c6af0,#a78bfa)" data-theme="purple" onclick="setTheme('purple',this)"></div>
-          <div class="theme-chip" style="background:linear-gradient(135deg,#3b9af0,#7ed4fa)" data-theme="blue" onclick="setTheme('blue',this)"></div>
-          <div class="theme-chip" style="background:linear-gradient(135deg,#5ce08a,#a8f0c0)" data-theme="green" onclick="setTheme('green',this)"></div>
-          <div class="theme-chip" style="background:linear-gradient(135deg,#e05c8a,#f0a8c0)" data-theme="rose" onclick="setTheme('rose',this)"></div>
-          <div class="theme-chip" style="background:linear-gradient(135deg,#f07c3c,#f0b87c)" data-theme="amber" onclick="setTheme('amber',this)"></div>
+          <div class="theme-chip" style="background:linear-gradient(135deg,#a78bfa,#c4b5fd)" data-theme="purple" onclick="setTheme('purple',this)"></div>
+          <div class="theme-chip" style="background:linear-gradient(135deg,#60a5fa,#93c5fd)" data-theme="blue" onclick="setTheme('blue',this)"></div>
+          <div class="theme-chip" style="background:linear-gradient(135deg,#4ade80,#86efac)" data-theme="green" onclick="setTheme('green',this)"></div>
+          <div class="theme-chip" style="background:linear-gradient(135deg,#f472b6,#f9a8d4)" data-theme="rose" onclick="setTheme('rose',this)"></div>
+          <div class="theme-chip" style="background:linear-gradient(135deg,#fb923c,#fdba74)" data-theme="amber" onclick="setTheme('amber',this)"></div>
         </div>
       </div>
       <div class="toggle-row">
-        <span class="toggle-label">إظهار الإحصائيات</span>
+        <span class="toggle-label">إظهار الإحصائيات للزوار</span>
         <div class="toggle on" id="toggleStats" onclick="toggleSetting('showStats',this)"></div>
       </div>
       <div class="toggle-row">
@@ -806,7 +723,7 @@
     <div class="admin-section" style="margin-top:16px">
       <div class="admin-section-title">💾 النسخ الاحتياطي</div>
       <div class="action-bar">
-        <button class="btn btn-gold btn-sm" onclick="exportData()">⬇️ تصدير البيانات</button>
+        <button class="btn btn-gold btn-sm" onclick="exportData()">⬇️ تصدير</button>
         <label class="btn btn-ghost btn-sm" style="cursor:pointer">
           ⬆️ استيراد
           <input type="file" accept=".json" style="display:none" onchange="importData(event)"/>
@@ -830,8 +747,8 @@
     </div>
 
     <div class="analytics-grid" id="kpiGrid">
-      <div class="kpi-card"><div class="kpi-value" id="kpiViews">0</div><div class="kpi-label">إجمالي المشاهدات</div><div class="kpi-change up" id="kpiViewsChange"></div></div>
-      <div class="kpi-card"><div class="kpi-value" id="kpiClicks">0</div><div class="kpi-label">إجمالي النقرات</div><div class="kpi-change up" id="kpiClicksChange"></div></div>
+      <div class="kpi-card"><div class="kpi-value" id="kpiViews">0</div><div class="kpi-label">إجمالي المشاهدات</div></div>
+      <div class="kpi-card"><div class="kpi-value" id="kpiClicks">0</div><div class="kpi-label">إجمالي النقرات</div></div>
       <div class="kpi-card"><div class="kpi-value" id="kpiCTR">0%</div><div class="kpi-label">نسبة النقر</div></div>
       <div class="kpi-card"><div class="kpi-value" id="kpiToday">0</div><div class="kpi-label">نقرات اليوم</div></div>
     </div>
@@ -868,14 +785,14 @@
 
     <div class="share-grid">
       <div class="share-option" onclick="shareVia('whatsapp')"><div class="share-option-icon">💬</div>واتساب</div>
-      <div class="share-option" onclick="shareVia('twitter')"><div class="share-option-icon">🐦</div>تويتر</div>
+      <div class="share-option" onclick="shareVia('twitter')"><div class="share-option-icon">🐦</div>تويتر / X</div>
       <div class="share-option" onclick="shareVia('telegram')"><div class="share-option-icon">✈️</div>تيليغرام</div>
       <div class="share-option" onclick="shareVia('email')"><div class="share-option-icon">📧</div>بريد</div>
       <div class="share-option" onclick="shareVia('sms')"><div class="share-option-icon">📱</div>رسالة</div>
       <div class="share-option" onclick="nativeShare()"><div class="share-option-icon">⬆️</div>مشاركة</div>
     </div>
 
-    <button class="btn btn-gold" onclick="downloadQR()">⬇️ تحميل QR</button>
+    <button class="btn btn-gold" onclick="downloadQR()">⬇️ تحميل رمز QR</button>
   </div>
 
   <!-- BOTTOM NAV -->
@@ -926,7 +843,7 @@
 // ═══════════════════════════════════════════════════════════
 // STATE
 // ═══════════════════════════════════════════════════════════
-const EMOJIS = ['🌟','🔥','💎','🚀','✨','🎯','💡','🎨','📱','💼','🎵','📚','🌍','❤️','🏆','⚡','🌈','🦋','🌺','🍀','📊','💰','🤝','🎭','🔮','🌙','☀️','⭐','🎪','🎲','🏡','🎓','💫','🌊','🦅','🎸','📸','🎥','🛡️','🌿','🏋️','🎯','🔑','💎','🌴','🐉','🦁','🌹','🎁','🏅'];
+const EMOJIS = ['🌟','🔥','💎','🚀','✨','🎯','💡','🎨','📱','💼','🎵','📚','🌍','❤️','🏆','⚡','🌈','🦋','🌺','🍀','📊','💰','🤝','🎭','🔮','🌙','☀️','⭐','🎪','🎲','🏡','🎓','💫','🌊','🦅','🎸','📸','🎥','🛡️','🌿','🏋️','🔑','🌴','🐉','🦁','🌹','🎁','🏅'];
 
 const SOCIAL_ICONS = {
   twitter: `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.74l7.73-8.835L1.254 2.25H8.08l4.259 5.631 5.905-5.631zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>`,
@@ -939,12 +856,12 @@ const SOCIAL_ICONS = {
 const SOCIAL_NAMES = { twitter:'تويتر', instagram:'إنستغرام', youtube:'يوتيوب', tiktok:'تيك توك', linkedin:'لينكد إن', whatsapp:'واتساب' };
 
 const THEMES = {
-  gold: { '--gold':'#c9a96e','--gold2':'#e8c87a','--gold-dim':'rgba(201,169,110,0.12)','--border':'rgba(201,169,110,0.18)' },
-  purple: { '--gold':'#a78bfa','--gold2':'#c4b5fd','--gold-dim':'rgba(167,139,250,0.12)','--border':'rgba(167,139,250,0.18)' },
-  blue: { '--gold':'#60a5fa','--gold2':'#93c5fd','--gold-dim':'rgba(96,165,250,0.12)','--border':'rgba(96,165,250,0.18)' },
-  green: { '--gold':'#4ade80','--gold2':'#86efac','--gold-dim':'rgba(74,222,128,0.12)','--border':'rgba(74,222,128,0.18)' },
-  rose: { '--gold':'#f472b6','--gold2':'#f9a8d4','--gold-dim':'rgba(244,114,182,0.12)','--border':'rgba(244,114,182,0.18)' },
-  amber: { '--gold':'#fb923c','--gold2':'#fdba74','--gold-dim':'rgba(251,146,60,0.12)','--border':'rgba(251,146,60,0.18)' },
+  gold: { '--gold':'#c9a96e','--gold2':'#e8c87a','--gold-dim':'rgba(201,169,110,0.12)','--border':'rgba(201,169,110,0.18)','--shadow-gold':'0 0 30px rgba(201,169,110,0.15)','--shadow-gold-btn':'rgba(201,169,110,0.3)' },
+  purple: { '--gold':'#a78bfa','--gold2':'#c4b5fd','--gold-dim':'rgba(167,139,250,0.12)','--border':'rgba(167,139,250,0.18)','--shadow-gold':'0 0 30px rgba(167,139,250,0.15)','--shadow-gold-btn':'rgba(167,139,250,0.3)' },
+  blue: { '--gold':'#60a5fa','--gold2':'#93c5fd','--gold-dim':'rgba(96,165,250,0.12)','--border':'rgba(96,165,250,0.18)','--shadow-gold':'0 0 30px rgba(96,165,250,0.15)','--shadow-gold-btn':'rgba(96,165,250,0.3)' },
+  green: { '--gold':'#4ade80','--gold2':'#86efac','--gold-dim':'rgba(74,222,128,0.12)','--border':'rgba(74,222,128,0.18)','--shadow-gold':'0 0 30px rgba(74,222,128,0.15)','--shadow-gold-btn':'rgba(74,222,128,0.3)' },
+  rose: { '--gold':'#f472b6','--gold2':'#f9a8d4','--gold-dim':'rgba(244,114,182,0.12)','--border':'rgba(244,114,182,0.18)','--shadow-gold':'0 0 30px rgba(244,114,182,0.15)','--shadow-gold-btn':'rgba(244,114,182,0.3)' },
+  amber: { '--gold':'#fb923c','--gold2':'#fdba74','--gold-dim':'rgba(251,146,60,0.12)','--border':'rgba(251,146,60,0.18)','--shadow-gold':'0 0 30px rgba(251,146,60,0.15)','--shadow-gold-btn':'rgba(251,146,60,0.3)' },
 };
 
 let state = {
@@ -955,7 +872,7 @@ let state = {
   analytics: { totalViews:0, totalClicks:0, today:0, weekData:[0,0,0,0,0,0,0], linkClicks:{} },
 };
 
-let emojiTargetContext = null; // 'avatar' or linkId
+let emojiTargetContext = null; 
 
 // ═══════════════════════════════════════════════════════════
 // STORAGE
@@ -967,7 +884,6 @@ function load() {
   try {
     const d = localStorage.getItem('wasla_data');
     if (d) state = { ...state, ...JSON.parse(d) };
-    // Ensure defaults
     state.analytics = state.analytics || { totalViews:0, totalClicks:0, today:0, weekData:[0,0,0,0,0,0,0], linkClicks:{} };
     state.settings = state.settings || {};
     if (state.settings.showStats === undefined) state.settings.showStats = true;
@@ -985,28 +901,42 @@ function initLock() {
   if (!state.settings.pin) { unlockApp(); return; }
   document.getElementById('pinKeypad').addEventListener('click', e => {
     const btn = e.target.closest('.pin-key');
-    if (!btn) return;
+    if (!btn || btn.classList.contains('empty')) return;
     const v = btn.dataset.v;
-    if (!v) return;
+    
     if (v === 'back') { pinEntry = pinEntry.slice(0,-1); }
     else if (pinEntry.length < 4) { pinEntry += v; }
+    
     updatePinDots();
     if (pinEntry.length === 4) checkPin();
   });
 }
 function updatePinDots() {
-  document.querySelectorAll('.pin-dot').forEach((d,i) => d.classList.toggle('filled', i < pinEntry.length));
+  document.querySelectorAll('.pin-dot').forEach((d,i) => {
+    if (i < pinEntry.length) d.classList.add('filled');
+    else d.classList.remove('filled');
+  });
 }
 function checkPin() {
   if (pinEntry === state.settings.pin) { unlockApp(); }
   else {
+    const keypad = document.getElementById('pinKeypad');
+    keypad.style.pointerEvents = 'none'; // Prevent input while error animating
+    
     document.getElementById('lockError').textContent = 'رمز خاطئ، حاول مجدداً';
-    document.querySelectorAll('.pin-dot').forEach(d => { d.style.background='var(--danger)'; d.style.borderColor='var(--danger)'; });
+    const dotsContainer = document.getElementById('pinDots');
+    dotsContainer.classList.add('shake');
+    
+    document.querySelectorAll('.pin-dot').forEach(d => { 
+      d.style.background='var(--danger)'; d.style.borderColor='var(--danger)'; 
+    });
+    
     setTimeout(() => {
-      pinEntry = '';
-      updatePinDots();
+      pinEntry = ''; updatePinDots();
       document.querySelectorAll('.pin-dot').forEach(d => { d.style.background=''; d.style.borderColor=''; });
       document.getElementById('lockError').textContent = '';
+      dotsContainer.classList.remove('shake');
+      keypad.style.pointerEvents = 'auto';
     }, 900);
   }
 }
@@ -1024,12 +954,10 @@ function initApp() {
   renderProfile();
   populateAdminForm();
   renderLinkEditors();
-  renderAnalytics();
   generateQR();
   trackView();
   initInstallBanner();
 
-  // Record daily view
   const todayKey = new Date().toDateString();
   if (localStorage.getItem('wasla_lastview') !== todayKey) {
     state.analytics.today = 0;
@@ -1041,16 +969,22 @@ function initApp() {
 // TAB NAVIGATION
 // ═══════════════════════════════════════════════════════════
 function switchTab(tab) {
-  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.page').forEach(p => {
+    p.classList.remove('active');
+    // Reset animation
+    p.style.animation = 'none'; p.offsetHeight; p.style.animation = null; 
+  });
   document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
   document.querySelectorAll('.bottom-nav-item').forEach(b => b.classList.remove('active'));
+  
   document.getElementById('page-'+tab).classList.add('active');
   const nt = document.getElementById('tab-'+tab);
   if (nt) nt.classList.add('active');
   document.getElementById('bnav-'+tab)?.classList.add('active');
+  
   if (tab === 'analytics') renderAnalytics();
-  if (tab === 'share') { generateQR(); }
-  window.scrollTo(0,0);
+  if (tab === 'share') generateQR();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
 // ═══════════════════════════════════════════════════════════
@@ -1059,7 +993,6 @@ function switchTab(tab) {
 function renderProfile() {
   const { profile, socials, links, settings, analytics } = state;
 
-  // Avatar
   const el = document.getElementById('profileAvatar');
   if (profile.avatarType === 'image' && profile.avatar) {
     el.innerHTML = `<img src="${profile.avatar}" alt="avatar"/>`;
@@ -1071,36 +1004,40 @@ function renderProfile() {
   document.getElementById('profileHandle').textContent = profile.handle ? `@${profile.handle.replace('@','')}` : '@username';
   document.getElementById('profileBio').textContent = profile.bio || 'أضف نبذة عنك لتظهر هنا';
 
-  // Stats
   document.getElementById('statsStrip').style.display = settings.showStats ? 'flex' : 'none';
   document.getElementById('statViews').textContent = fmt(analytics.totalViews);
   document.getElementById('statClicks').textContent = fmt(analytics.totalClicks);
   document.getElementById('statLinks').textContent = links.filter(l=>l.active!==false).length;
 
-  // Socials
   const socialRow = document.getElementById('socialRow');
   socialRow.innerHTML = '';
   Object.entries(socials).forEach(([k,v]) => {
     if (!v) return;
     const a = document.createElement('a');
     a.className = 'social-pill';
-    a.href = v; a.target = '_blank'; a.rel = 'noopener';
+    a.href = v.startsWith('http') ? v : `https://${v}`; 
+    a.target = '_blank'; a.rel = 'noopener';
     a.innerHTML = `${SOCIAL_ICONS[k]}<span>${SOCIAL_NAMES[k]}</span>`;
     socialRow.appendChild(a);
   });
 
-  // Links
   const container = document.getElementById('linksContainer');
   container.innerHTML = '';
   const active = links.filter(l => l.active !== false);
+  
   if (!active.length) {
-    container.innerHTML = `<div style="text-align:center;padding:40px 20px;color:var(--text-faint);font-size:0.85rem">لا توجد روابط بعد<br/>أضف روابطك من لوحة التعديل</div>`;
+    container.innerHTML = `
+      <div style="text-align:center;padding:50px 20px;color:var(--text-faint);font-size:0.9rem;display:flex;flex-direction:column;align-items:center;gap:12px;">
+        <div style="font-size:2.5rem;opacity:0.5;">📭</div>
+        لا توجد روابط بعد<br/>أضف روابطك من لوحة التعديل
+      </div>`;
     return;
   }
+  
   active.forEach(link => {
     const card = document.createElement('a');
     card.className = 'link-card';
-    card.href = link.url || '#';
+    card.href = link.url ? (link.url.startsWith('http') ? link.url : `https://${link.url}`) : '#';
     card.target = '_blank'; card.rel = 'noopener';
     const clicks = analytics.linkClicks[link.id] || 0;
     card.innerHTML = `
@@ -1129,7 +1066,6 @@ function populateAdminForm() {
   document.getElementById('inputHandle').value = profile.handle || '';
   document.getElementById('inputBio').value = profile.bio || '';
 
-  // Avatar preview
   const prev = document.getElementById('adminAvatarPreview');
   if (profile.avatarType === 'image' && profile.avatar) {
     prev.innerHTML = `<img src="${profile.avatar}" alt=""/>`;
@@ -1142,11 +1078,9 @@ function populateAdminForm() {
     if (el) el.value = socials[k] || '';
   });
 
-  // Toggle states
   document.getElementById('toggleStats').classList.toggle('on', settings.showStats);
   document.getElementById('toggleClicks').classList.toggle('on', settings.showClicks);
 
-  // Theme chips
   document.querySelectorAll('.theme-chip').forEach(c => {
     c.classList.toggle('active', c.dataset.theme === settings.theme);
   });
@@ -1156,8 +1090,7 @@ function updateProfile() {
   state.profile.name = document.getElementById('inputName').value;
   state.profile.handle = document.getElementById('inputHandle').value.replace('@','');
   state.profile.bio = document.getElementById('inputBio').value;
-  save();
-  renderProfile();
+  save(); renderProfile();
 }
 
 function updateSocials() {
@@ -1165,8 +1098,7 @@ function updateSocials() {
     const el = document.getElementById('social'+k);
     if (el) state.socials[k.toLowerCase()] = el.value;
   });
-  save();
-  renderProfile();
+  save(); renderProfile();
 }
 
 function handleAvatarUpload(event) {
@@ -1174,11 +1106,23 @@ function handleAvatarUpload(event) {
   if (!file) return;
   const reader = new FileReader();
   reader.onload = e => {
-    state.profile.avatar = e.target.result;
-    state.profile.avatarType = 'image';
-    save();
-    renderProfile();
-    populateAdminForm();
+    const img = new Image();
+    img.onload = () => {
+      // Compress image to avoid localStorage size limit
+      const canvas = document.createElement('canvas');
+      const MAX_SIZE = 250;
+      let width = img.width; let height = img.height;
+      if (width > height) { if (width > MAX_SIZE) { height *= MAX_SIZE / width; width = MAX_SIZE; } } 
+      else { if (height > MAX_SIZE) { width *= MAX_SIZE / height; height = MAX_SIZE; } }
+      canvas.width = width; canvas.height = height;
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(img, 0, 0, width, height);
+      
+      state.profile.avatar = canvas.toDataURL('image/jpeg', 0.85);
+      state.profile.avatarType = 'image';
+      save(); renderProfile(); populateAdminForm();
+    };
+    img.src = e.target.result;
   };
   reader.readAsDataURL(file);
 }
@@ -1192,18 +1136,24 @@ function renderLinkEditors() {
   state.links.forEach((link, i) => {
     const item = document.createElement('div');
     item.className = 'link-editor-item';
-    item.dataset.id = link.id;
     item.innerHTML = `
       <div class="link-editor-row">
         <div class="link-emoji-picker" onclick="openEmojiPickerFor('${link.id}')">${link.icon||'🔗'}</div>
         <input class="form-input" placeholder="عنوان الرابط" value="${link.title||''}" oninput="updateLink('${link.id}','title',this.value)"/>
-        <button class="delete-btn" onclick="deleteLink('${link.id}')">✕</button>
       </div>
       <input class="form-input" placeholder="https://..." value="${link.url||''}" oninput="updateLink('${link.id}','url',this.value)" dir="ltr"/>
       <input class="form-input" placeholder="وصف اختياري" value="${link.desc||''}" oninput="updateLink('${link.id}','desc',this.value)" style="font-size:0.8rem"/>
-      <div style="display:flex;align-items:center;justify-content:space-between">
-        <span style="font-size:0.75rem;color:var(--text-faint)">ظاهر</span>
-        <div class="toggle ${link.active!==false?'on':''}" onclick="toggleLink('${link.id}',this)"></div>
+      <div class="link-editor-controls">
+        <div class="reorder-btns">
+          <button class="icon-btn" onclick="moveLink(${i}, -1)" ${i===0?'disabled':''}>↑</button>
+          <button class="icon-btn" onclick="moveLink(${i}, 1)" ${i===state.links.length-1?'disabled':''}>↓</button>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px;">
+          <span style="font-size:0.75rem;color:var(--text-faint)">ظاهر</span>
+          <div class="toggle ${link.active!==false?'on':''}" onclick="toggleLink('${link.id}',this)"></div>
+          <div style="width:1px;height:24px;background:var(--border);margin:0 4px;"></div>
+          <button class="delete-btn" onclick="deleteLink('${link.id}')">✕</button>
+        </div>
       </div>
     `;
     list.appendChild(item);
@@ -1213,10 +1163,7 @@ function renderLinkEditors() {
 function addNewLink() {
   const id = 'link_' + Date.now();
   state.links.push({ id, title:'', url:'', desc:'', icon:'🔗', active:true });
-  save();
-  renderLinkEditors();
-  renderProfile();
-  // Scroll to new item
+  save(); renderLinkEditors(); renderProfile();
   setTimeout(() => document.getElementById('linkEditorList').lastElementChild?.scrollIntoView({ behavior:'smooth' }), 100);
 }
 
@@ -1225,13 +1172,20 @@ function updateLink(id, field, value) {
   if (link) { link[field] = value; save(); renderProfile(); }
 }
 
+function moveLink(index, dir) {
+  if (dir === -1 && index > 0) {
+    const tmp = state.links[index]; state.links[index] = state.links[index - 1]; state.links[index - 1] = tmp;
+  } else if (dir === 1 && index < state.links.length - 1) {
+    const tmp = state.links[index]; state.links[index] = state.links[index + 1]; state.links[index + 1] = tmp;
+  }
+  save(); renderLinkEditors(); renderProfile();
+}
+
 function deleteLink(id) {
   if (!confirm('حذف هذا الرابط؟')) return;
   state.links = state.links.filter(l => l.id !== id);
   delete state.analytics.linkClicks[id];
-  save();
-  renderLinkEditors();
-  renderProfile();
+  save(); renderLinkEditors(); renderProfile();
 }
 
 function toggleLink(id, el) {
@@ -1304,9 +1258,7 @@ function applyTheme(theme) {
 function savePin() {
   const pin = document.getElementById('inputPin').value;
   if (pin && !/^\d{4}$/.test(pin)) { showToast('الرمز يجب أن يكون 4 أرقام'); return; }
-  state.settings.pin = pin;
-  save();
-  showToast(pin ? 'تم حفظ الرمز ✓' : 'تم إزالة الرمز');
+  state.settings.pin = pin; save(); showToast(pin ? 'تم حفظ الرمز ✓' : 'تم إزالة الرمز');
 }
 function clearPin() { state.settings.pin = ''; document.getElementById('inputPin').value = ''; save(); showToast('تم إزالة الرمز'); }
 
@@ -1319,7 +1271,6 @@ function trackView() {
   state.analytics.weekData = state.analytics.weekData || [0,0,0,0,0,0,0];
   state.analytics.weekData[d] = (state.analytics.weekData[d]||0) + 1;
   save();
-  document.getElementById('statViews').textContent = fmt(state.analytics.totalViews);
 }
 
 function trackClick(linkId) {
@@ -1346,7 +1297,7 @@ function renderAnalytics() {
   chart.innerHTML = '';
   wd.forEach((v,i) => {
     const pct = Math.round((v/max)*100);
-    chart.innerHTML += `<div class="chart-bar-wrap"><div class="chart-bar" style="height:${pct}%" title="${v}"></div><div class="chart-bar-label">${days[i]}</div></div>`;
+    chart.innerHTML += `<div class="chart-bar-wrap"><div class="chart-bar" style="height:0%" data-height="${pct}%" title="${v}"></div><div class="chart-bar-label">${days[i]}</div></div>`;
   });
 
   // Top links
@@ -1364,12 +1315,14 @@ function renderAnalytics() {
   document.getElementById('sourceChart').innerHTML = sources.map(s => `
     <div class="progress-item">
       <div class="progress-info"><span class="progress-label">${s.label}</span><span class="progress-value">${s.pct}%</span></div>
-      <div class="progress-bar-track"><div class="progress-bar-fill" style="width:${s.pct}%"></div></div>
+      <div class="progress-bar-track"><div class="progress-bar-fill" style="width:0%" data-width="${s.pct}%"></div></div>
     </div>`).join('');
 
-  // Update mini stats
-  document.getElementById('statViews').textContent = fmt(a.totalViews||0);
-  document.getElementById('statClicks').textContent = fmt(a.totalClicks||0);
+  // Animate Charts
+  setTimeout(() => {
+    document.querySelectorAll('.chart-bar').forEach(bar => { bar.style.height = bar.dataset.height; });
+    document.querySelectorAll('.progress-bar-fill').forEach(bar => { bar.style.width = bar.dataset.width; });
+  }, 50);
 }
 
 function fmt(n) {
@@ -1379,12 +1332,11 @@ function fmt(n) {
 }
 
 // ═══════════════════════════════════════════════════════════
-// QR CODE (pure canvas, no library)
+// SHARE & QR CODE
 // ═══════════════════════════════════════════════════════════
 function generateQR() {
   const url = getProfileUrl();
   document.getElementById('shareUrl').textContent = url;
-  // Draw a decorative placeholder QR (functional QR requires a library, we draw a styled art version)
   drawDecorativeQR(url);
 }
 
@@ -1397,57 +1349,35 @@ function drawDecorativeQR(text) {
   const canvas = document.getElementById('qrCanvas');
   const ctx = canvas.getContext('2d');
   const size = 180; canvas.width = size; canvas.height = size;
-  ctx.fillStyle = '#ffffff';
-  ctx.fillRect(0,0,size,size);
+  ctx.fillStyle = '#ffffff'; ctx.fillRect(0,0,size,size);
 
-  // Seed a pseudo-random grid from text
-  let seed = 0;
-  for (let i=0;i<text.length;i++) seed = ((seed<<5)-seed)+text.charCodeAt(i);
+  let seed = 0; for (let i=0;i<text.length;i++) seed = ((seed<<5)-seed)+text.charCodeAt(i);
   function rand() { seed = (seed*9301+49297)%233280; return seed/233280; }
 
   const modules = 21; const cell = Math.floor(size/modules);
-  // Generate module pattern
-  const grid = Array.from({length:modules},(_,r)=>Array.from({length:modules},(_,c)=>{
-    // Finder patterns (corners)
-    if ((r<7&&c<7)||(r<7&&c>=modules-7)||(r>=modules-7&&c<7)) return true;
-    return rand()>0.5;
-  }));
-
-  // Draw
   for (let r=0;r<modules;r++) {
     for (let c=0;c<modules;c++) {
-      if (grid[r][c]) {
-        const isFinder = (r<7&&c<7)||(r<7&&c>=modules-7)||(r>=modules-7&&c<7);
+      const isFinder = (r<7&&c<7)||(r<7&&c>=modules-7)||(r>=modules-7&&c<7);
+      if (isFinder || rand()>0.5) {
         ctx.fillStyle = isFinder ? '#0f0f1a' : '#1a1a2e';
         const x = c*cell + 2; const y = r*cell + 2;
-        ctx.beginPath();
-        ctx.roundRect(x,y,cell-1,cell-1,1.5);
-        ctx.fill();
+        ctx.beginPath(); ctx.roundRect(x,y,cell-1,cell-1,1.5); ctx.fill();
       }
     }
   }
-  // Center logo
   const ctr = size/2; const logoSize = 28;
-  ctx.fillStyle = '#ffffff';
-  ctx.beginPath(); ctx.roundRect(ctr-logoSize/2,ctr-logoSize/2,logoSize,logoSize,6); ctx.fill();
-  ctx.fillStyle = '#0f0f1a';
-  ctx.font = 'bold 16px serif';
-  ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+  ctx.fillStyle = '#ffffff'; ctx.beginPath(); ctx.roundRect(ctr-logoSize/2,ctr-logoSize/2,logoSize,logoSize,6); ctx.fill();
+  ctx.fillStyle = '#0f0f1a'; ctx.font = 'bold 16px serif'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
   ctx.fillText('و', ctr, ctr+1);
 }
 
 function downloadQR() {
   const canvas = document.getElementById('qrCanvas');
-  const a = document.createElement('a');
-  a.download = 'wasla-qr.png';
-  a.href = canvas.toDataURL('image/png');
-  a.click();
+  const a = document.createElement('a'); a.download = 'wasla-qr.png';
+  a.href = canvas.toDataURL('image/png'); a.click();
   showToast('تم تحميل رمز QR ✓');
 }
 
-// ═══════════════════════════════════════════════════════════
-// SHARE
-// ═══════════════════════════════════════════════════════════
 function copyUrl() {
   const url = getProfileUrl();
   navigator.clipboard?.writeText(url).then(() => {
@@ -1478,7 +1408,7 @@ function nativeShare() {
 }
 
 // ═══════════════════════════════════════════════════════════
-// EXPORT / IMPORT / RESET
+// EXPORT / IMPORT
 // ═══════════════════════════════════════════════════════════
 function exportData() {
   const blob = new Blob([JSON.stringify(state, null, 2)], {type:'application/json'});
@@ -1491,8 +1421,7 @@ function importData(event) {
   const reader = new FileReader();
   reader.onload = e => {
     try {
-      const data = JSON.parse(e.target.result);
-      state = { ...state, ...data };
+      const data = JSON.parse(e.target.result); state = { ...state, ...data };
       save(); initApp(); populateAdminForm(); renderLinkEditors();
       showToast('تم استيراد البيانات ✓');
     } catch { showToast('ملف غير صالح'); }
@@ -1502,12 +1431,11 @@ function importData(event) {
 
 function resetAll() {
   if (!confirm('هل أنت متأكد من مسح جميع البيانات؟')) return;
-  localStorage.clear();
-  location.reload();
+  localStorage.clear(); location.reload();
 }
 
 // ═══════════════════════════════════════════════════════════
-// PWA INSTALL
+// PWA INSTALL BANNER
 // ═══════════════════════════════════════════════════════════
 let deferredPrompt = null;
 function initInstallBanner() {
@@ -1515,12 +1443,14 @@ function initInstallBanner() {
   window.addEventListener('beforeinstallprompt', e => {
     e.preventDefault(); deferredPrompt = e;
     document.getElementById('installBanner').style.display = 'flex';
-    document.getElementById('installBanner').onclick = () => {
+    document.getElementById('installBanner').onclick = (ev) => {
+      if(ev.target.classList.contains('install-close')) return;
       if (deferredPrompt) { deferredPrompt.prompt(); deferredPrompt.userChoice.then(()=>{ deferredPrompt=null; dismissInstall(); }); }
     };
   });
 }
-function dismissInstall() {
+function dismissInstall(e) {
+  if (e) e.stopPropagation();
   localStorage.setItem('wasla_install_dismissed','1');
   document.getElementById('installBanner').style.display = 'none';
 }
@@ -1535,16 +1465,6 @@ function showToast(msg) {
   toastTimer = setTimeout(() => t.classList.remove('show'), 2500);
 }
 
-// ═══════════════════════════════════════════════════════════
-// SERVICE WORKER REGISTRATION
-// ═══════════════════════════════════════════════════════════
-if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('sw.js').catch(()=>{});
-}
-
-// ═══════════════════════════════════════════════════════════
-// BOOT
-// ═══════════════════════════════════════════════════════════
 initLock();
 </script>
 </body>
