@@ -1,0 +1,1551 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
+<meta name="theme-color" content="#0f0f1a"/>
+<meta name="description" content="وصلة - مشاركة روابطك بأناقة"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+<meta name="apple-mobile-web-app-title" content="وصلة"/>
+<link rel="manifest" href="manifest.json"/>
+<link rel="apple-touch-icon" href="icon.svg"/>
+<link rel="icon" type="image/svg+xml" href="icon.svg"/>
+<meta name="mobile-web-app-capable" content="yes"/>
+<meta name="apple-touch-fullscreen" content="yes"/>
+<title>وصلة</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Naskh+Arabic:wght@400;500;600;700&family=Amiri:wght@400;700&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --bg: #0b0b16;
+    --surface: #13131f;
+    --surface2: #1c1c2e;
+    --border: rgba(201,169,110,0.18);
+    --gold: #c9a96e;
+    --gold2: #e8c87a;
+    --gold-dim: rgba(201,169,110,0.12);
+    --text: #f0ead8;
+    --text-dim: rgba(240,234,216,0.55);
+    --text-faint: rgba(240,234,216,0.28);
+    --danger: #e05c5c;
+    --success: #5ce08a;
+    --radius: 18px;
+    --radius-sm: 10px;
+    --shadow: 0 8px 40px rgba(0,0,0,0.6);
+    --shadow-gold: 0 0 30px rgba(201,169,110,0.15);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Noto Naskh Arabic', serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    min-height: -webkit-fill-available;
+    overflow-x: hidden;
+    direction: rtl;
+  }
+
+  /* ─── APP SHELL ─── */
+  #app { min-height: 100vh; display: flex; flex-direction: column; }
+
+  /* ─── PAGES ─── */
+  .page { display: none; flex-direction: column; min-height: 100vh; }
+  .page.active { display: flex; }
+
+  /* ─── BACKGROUND DECORATION ─── */
+  .bg-orb {
+    position: fixed; border-radius: 50%; pointer-events: none; z-index: 0;
+    filter: blur(80px); opacity: 0.08;
+  }
+  .bg-orb-1 { width: 400px; height: 400px; background: var(--gold); top: -120px; right: -100px; }
+  .bg-orb-2 { width: 300px; height: 300px; background: #6e4fc9; bottom: 80px; left: -80px; }
+  .bg-orb-3 { width: 200px; height: 200px; background: var(--gold2); top: 50%; right: -60px; }
+
+  /* ─── NAVBAR ─── */
+  .nav {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(11,11,22,0.85);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border-bottom: 1px solid var(--border);
+    padding: 14px 20px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .nav-logo {
+    font-family: 'Amiri', serif;
+    font-size: 1.7rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, var(--gold), var(--gold2));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    letter-spacing: 0.02em;
+  }
+  .nav-tabs { display: flex; gap: 6px; }
+  .nav-tab {
+    background: none; border: 1px solid transparent;
+    color: var(--text-dim); padding: 7px 14px; border-radius: 30px;
+    font-family: 'Noto Naskh Arabic', serif; font-size: 0.82rem;
+    cursor: pointer; transition: all 0.2s;
+  }
+  .nav-tab.active {
+    background: var(--gold-dim); border-color: var(--border);
+    color: var(--gold); font-weight: 600;
+  }
+  .nav-tab:hover:not(.active) { color: var(--text); border-color: var(--border); }
+
+  /* ─── HERO / PROFILE VIEW ─── */
+  .profile-page { align-items: center; padding: 0 0 80px 0; }
+
+  .profile-hero {
+    width: 100%; padding: 50px 24px 30px;
+    display: flex; flex-direction: column; align-items: center; gap: 16px;
+    position: relative; z-index: 1;
+  }
+  .profile-avatar-wrap {
+    position: relative; width: 108px; height: 108px;
+  }
+  .avatar-ring {
+    position: absolute; inset: -5px; border-radius: 50%;
+    background: conic-gradient(var(--gold), var(--gold2), var(--gold));
+    animation: spinRing 8s linear infinite;
+    opacity: 0.8;
+  }
+  @keyframes spinRing {
+    to { transform: rotate(360deg); }
+  }
+  .profile-avatar {
+    position: relative; width: 108px; height: 108px; border-radius: 50%;
+    background: var(--surface2); border: 3px solid var(--bg);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 2.8rem; overflow: hidden; z-index: 1;
+    box-shadow: var(--shadow);
+  }
+  .profile-avatar img { width: 100%; height: 100%; object-fit: cover; }
+  .profile-name {
+    font-family: 'Amiri', serif; font-size: 1.9rem; font-weight: 700;
+    text-align: center; line-height: 1.2;
+  }
+  .profile-handle {
+    font-size: 0.85rem; color: var(--gold); letter-spacing: 0.04em;
+    direction: ltr;
+  }
+  .profile-bio {
+    font-size: 0.92rem; color: var(--text-dim); text-align: center;
+    max-width: 320px; line-height: 1.8;
+  }
+
+  /* Stats strip */
+  .stats-strip {
+    display: flex; gap: 1px; background: var(--border);
+    border-radius: var(--radius); overflow: hidden;
+    border: 1px solid var(--border); margin: 0 24px;
+    width: calc(100% - 48px); max-width: 420px;
+  }
+  .stat-item {
+    flex: 1; background: var(--surface); padding: 12px 8px;
+    text-align: center; display: flex; flex-direction: column; gap: 2px;
+  }
+  .stat-num {
+    font-family: 'Amiri', serif; font-size: 1.3rem;
+    color: var(--gold); font-weight: 700;
+  }
+  .stat-label { font-size: 0.7rem; color: var(--text-faint); }
+
+  /* Social icons row */
+  .social-row {
+    display: flex; gap: 10px; flex-wrap: wrap; justify-content: center;
+    padding: 0 24px; max-width: 420px; width: 100%;
+  }
+  .social-pill {
+    display: flex; align-items: center; gap: 6px;
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 30px; padding: 8px 14px;
+    text-decoration: none; color: var(--text-dim);
+    font-size: 0.78rem; transition: all 0.2s;
+  }
+  .social-pill:hover { border-color: var(--gold); color: var(--gold); transform: translateY(-2px); }
+  .social-pill svg { width: 14px; height: 14px; flex-shrink: 0; }
+
+  /* Links list */
+  .links-container {
+    width: 100%; max-width: 420px; padding: 16px 20px;
+    display: flex; flex-direction: column; gap: 12px;
+    position: relative; z-index: 1;
+  }
+
+  .section-label {
+    font-size: 0.72rem; color: var(--text-faint); letter-spacing: 0.12em;
+    text-align: center; margin: 4px 0 -2px;
+  }
+
+  .link-card {
+    display: flex; align-items: center; gap: 14px;
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 16px 18px;
+    text-decoration: none; color: var(--text);
+    transition: all 0.25s cubic-bezier(.4,0,.2,1);
+    position: relative; overflow: hidden;
+    cursor: pointer;
+  }
+  .link-card::before {
+    content: ''; position: absolute; inset: 0;
+    background: linear-gradient(135deg, transparent, rgba(201,169,110,0.05));
+    opacity: 0; transition: opacity 0.2s;
+  }
+  .link-card:hover {
+    transform: translateY(-3px) scale(1.01);
+    border-color: rgba(201,169,110,0.45);
+    box-shadow: var(--shadow-gold);
+  }
+  .link-card:hover::before { opacity: 1; }
+  .link-card:active { transform: scale(0.98); }
+
+  .link-icon {
+    width: 44px; height: 44px; border-radius: 12px;
+    background: var(--surface2); border: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.3rem; flex-shrink: 0;
+    transition: transform 0.2s;
+  }
+  .link-card:hover .link-icon { transform: scale(1.08) rotate(-3deg); }
+
+  .link-info { flex: 1; min-width: 0; }
+  .link-title { font-size: 0.98rem; font-weight: 600; margin-bottom: 2px; }
+  .link-desc { font-size: 0.78rem; color: var(--text-dim); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+  .link-arrow { color: var(--text-faint); transition: all 0.2s; flex-shrink: 0; }
+  .link-card:hover .link-arrow { color: var(--gold); transform: translateX(-4px); }
+
+  /* Click counter badge */
+  .click-badge {
+    position: absolute; top: 10px; left: 14px;
+    font-size: 0.65rem; color: var(--text-faint);
+    direction: ltr;
+  }
+
+  /* ─── ADMIN PAGE ─── */
+  .admin-page { padding: 0 0 100px 0; }
+
+  .admin-header {
+    padding: 24px 20px 16px;
+    display: flex; flex-direction: column; gap: 6px;
+  }
+  .admin-title {
+    font-family: 'Amiri', serif; font-size: 1.5rem; color: var(--gold);
+  }
+  .admin-subtitle { font-size: 0.8rem; color: var(--text-dim); }
+
+  /* Section cards */
+  .admin-section {
+    margin: 0 16px 16px;
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius); overflow: hidden;
+  }
+  .admin-section-title {
+    padding: 14px 18px 10px;
+    font-size: 0.75rem; font-weight: 600;
+    color: var(--gold); letter-spacing: 0.08em;
+    border-bottom: 1px solid var(--border);
+    background: var(--gold-dim);
+  }
+
+  /* Form controls */
+  .form-group { padding: 14px 18px; border-bottom: 1px solid var(--border); }
+  .form-group:last-child { border-bottom: none; }
+  .form-label {
+    display: block; font-size: 0.78rem; color: var(--text-dim);
+    margin-bottom: 7px; font-weight: 600;
+  }
+  .form-input, .form-textarea, .form-select {
+    width: 100%; background: var(--surface2); border: 1px solid var(--border);
+    border-radius: var(--radius-sm); padding: 10px 14px;
+    color: var(--text); font-family: 'Noto Naskh Arabic', serif;
+    font-size: 0.9rem; transition: border-color 0.2s; direction: rtl;
+  }
+  .form-input:focus, .form-textarea:focus, .form-select:focus {
+    outline: none; border-color: var(--gold);
+  }
+  .form-textarea { resize: vertical; min-height: 70px; }
+  .form-select { cursor: pointer; }
+  .form-select option { background: var(--surface2); }
+
+  /* Avatar upload */
+  .avatar-upload-area {
+    display: flex; align-items: center; gap: 16px; padding: 14px 18px;
+  }
+  .avatar-preview {
+    width: 64px; height: 64px; border-radius: 50%;
+    background: var(--surface2); border: 2px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.8rem; overflow: hidden; flex-shrink: 0;
+  }
+  .avatar-preview img { width: 100%; height: 100%; object-fit: cover; }
+  .avatar-upload-btn {
+    flex: 1; background: var(--gold-dim); border: 1px dashed var(--border);
+    border-radius: var(--radius-sm); padding: 10px;
+    color: var(--gold); font-family: 'Noto Naskh Arabic', serif;
+    font-size: 0.82rem; cursor: pointer; text-align: center;
+  }
+  .avatar-upload-btn:hover { border-color: var(--gold); }
+
+  /* Link editor */
+  .link-editor-list { padding: 8px; display: flex; flex-direction: column; gap: 8px; }
+  .link-editor-item {
+    background: var(--surface2); border: 1px solid var(--border);
+    border-radius: var(--radius-sm); padding: 12px 14px;
+    display: flex; flex-direction: column; gap: 8px;
+    position: relative;
+  }
+  .link-editor-row { display: flex; gap: 8px; align-items: center; }
+  .link-editor-row .form-input { flex: 1; }
+  .link-emoji-picker {
+    width: 48px; height: 38px; background: var(--surface);
+    border: 1px solid var(--border); border-radius: var(--radius-sm);
+    font-size: 1.3rem; cursor: pointer; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .delete-btn {
+    width: 32px; height: 32px; border-radius: 50%;
+    background: rgba(224,92,92,0.1); border: 1px solid rgba(224,92,92,0.3);
+    color: var(--danger); font-size: 1rem; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; transition: all 0.2s; line-height: 1;
+  }
+  .delete-btn:hover { background: rgba(224,92,92,0.25); }
+
+  .toggle-row {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 12px 18px;
+  }
+  .toggle-label { font-size: 0.85rem; }
+  .toggle {
+    width: 44px; height: 24px; background: var(--surface2);
+    border: 1px solid var(--border); border-radius: 12px;
+    position: relative; cursor: pointer; transition: background 0.2s;
+    flex-shrink: 0;
+  }
+  .toggle.on { background: var(--gold); border-color: var(--gold); }
+  .toggle::after {
+    content: ''; position: absolute; top: 3px; right: 3px;
+    width: 16px; height: 16px; border-radius: 50%;
+    background: white; transition: right 0.2s;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.3);
+  }
+  .toggle.on::after { right: calc(100% - 19px); }
+
+  /* Buttons */
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+    padding: 12px 24px; border-radius: 30px;
+    font-family: 'Noto Naskh Arabic', serif; font-size: 0.9rem; font-weight: 600;
+    cursor: pointer; transition: all 0.2s; border: none;
+  }
+  .btn-gold {
+    background: linear-gradient(135deg, var(--gold), var(--gold2));
+    color: #0f0f1a;
+    box-shadow: 0 4px 20px rgba(201,169,110,0.3);
+  }
+  .btn-gold:hover { transform: translateY(-2px); box-shadow: 0 6px 28px rgba(201,169,110,0.45); }
+  .btn-ghost {
+    background: transparent; border: 1px solid var(--border);
+    color: var(--text-dim);
+  }
+  .btn-ghost:hover { border-color: var(--gold); color: var(--gold); }
+  .btn-sm { padding: 8px 16px; font-size: 0.8rem; }
+  .btn-full { width: 100%; }
+
+  .action-bar {
+    padding: 16px; display: flex; gap: 10px; flex-wrap: wrap;
+  }
+
+  /* Add link button */
+  .add-link-btn {
+    margin: 0 16px; display: flex; align-items: center; justify-content: center;
+    gap: 8px; padding: 14px;
+    background: var(--gold-dim); border: 1px dashed rgba(201,169,110,0.4);
+    border-radius: var(--radius); color: var(--gold);
+    font-family: 'Noto Naskh Arabic', serif; font-size: 0.88rem;
+    cursor: pointer; transition: all 0.2s;
+  }
+  .add-link-btn:hover { background: rgba(201,169,110,0.18); border-color: var(--gold); }
+
+  /* ─── ANALYTICS PAGE ─── */
+  .analytics-page { padding: 0 0 80px; }
+
+  .analytics-header { padding: 24px 20px 0; }
+  .analytics-title { font-family: 'Amiri', serif; font-size: 1.5rem; color: var(--gold); margin-bottom: 4px; }
+
+  .analytics-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 12px;
+    padding: 16px;
+  }
+  .kpi-card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 18px 16px;
+    display: flex; flex-direction: column; gap: 4px;
+    position: relative; overflow: hidden;
+  }
+  .kpi-card::after {
+    content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 3px;
+    background: linear-gradient(90deg, var(--gold), var(--gold2));
+    opacity: 0.4;
+  }
+  .kpi-value {
+    font-family: 'Amiri', serif; font-size: 2rem; color: var(--gold); font-weight: 700;
+  }
+  .kpi-label { font-size: 0.72rem; color: var(--text-dim); }
+  .kpi-change { font-size: 0.7rem; margin-top: 4px; }
+  .kpi-change.up { color: var(--success); }
+  .kpi-change.down { color: var(--danger); }
+
+  .chart-card {
+    margin: 0 16px 16px;
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 18px;
+  }
+  .chart-title { font-size: 0.82rem; color: var(--text-dim); margin-bottom: 14px; font-weight: 600; }
+  .chart-bars { display: flex; align-items: flex-end; gap: 6px; height: 80px; }
+  .chart-bar-wrap { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px; }
+  .chart-bar {
+    width: 100%; border-radius: 4px 4px 0 0;
+    background: linear-gradient(180deg, var(--gold2), var(--gold));
+    opacity: 0.7; min-height: 4px; transition: opacity 0.2s;
+  }
+  .chart-bar:hover { opacity: 1; }
+  .chart-bar-label { font-size: 0.6rem; color: var(--text-faint); }
+
+  .top-links-list { display: flex; flex-direction: column; }
+  .top-link-row {
+    display: flex; align-items: center; gap: 12px;
+    padding: 12px 18px; border-bottom: 1px solid var(--border);
+  }
+  .top-link-row:last-child { border-bottom: none; }
+  .top-link-rank {
+    width: 24px; height: 24px; border-radius: 50%;
+    background: var(--gold-dim); border: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.7rem; color: var(--gold); flex-shrink: 0;
+  }
+  .top-link-name { flex: 1; font-size: 0.85rem; }
+  .top-link-clicks { font-size: 0.78rem; color: var(--gold); font-family: 'Amiri', serif; }
+
+  .progress-row { display: flex; flex-direction: column; gap: 10px; }
+  .progress-item { display: flex; flex-direction: column; gap: 5px; }
+  .progress-info { display: flex; justify-content: space-between; }
+  .progress-label { font-size: 0.78rem; color: var(--text-dim); }
+  .progress-value { font-size: 0.75rem; color: var(--gold); }
+  .progress-bar-track {
+    height: 6px; background: var(--surface2); border-radius: 3px; overflow: hidden;
+  }
+  .progress-bar-fill {
+    height: 100%; border-radius: 3px;
+    background: linear-gradient(90deg, var(--gold), var(--gold2));
+  }
+
+  /* ─── SHARE PAGE ─── */
+  .share-page { align-items: center; padding: 30px 20px 80px; }
+  .share-page .section-title {
+    font-family: 'Amiri', serif; font-size: 1.5rem; color: var(--gold);
+    text-align: center; margin-bottom: 6px;
+  }
+  .share-page .section-sub { font-size: 0.82rem; color: var(--text-dim); text-align: center; margin-bottom: 28px; }
+
+  .qr-wrap {
+    background: white; border-radius: 20px; padding: 20px;
+    box-shadow: var(--shadow-gold); margin-bottom: 24px;
+    position: relative; z-index: 1;
+  }
+  .qr-canvas { display: block; }
+
+  .share-url-box {
+    width: 100%; max-width: 380px;
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 14px 18px;
+    display: flex; align-items: center; gap: 12px; margin-bottom: 20px;
+  }
+  .share-url { flex: 1; font-size: 0.82rem; color: var(--text-dim); word-break: break-all; direction: ltr; text-align: left; }
+  .copy-btn {
+    background: var(--gold-dim); border: 1px solid var(--border);
+    border-radius: 8px; padding: 7px 12px;
+    color: var(--gold); font-family: 'Noto Naskh Arabic', serif;
+    font-size: 0.78rem; cursor: pointer; white-space: nowrap; transition: all 0.2s;
+  }
+  .copy-btn:hover { background: rgba(201,169,110,0.25); }
+  .copy-btn.copied { color: var(--success); border-color: var(--success); }
+
+  .share-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;
+    width: 100%; max-width: 380px; margin-bottom: 24px;
+  }
+  .share-option {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 16px 8px;
+    display: flex; flex-direction: column; align-items: center; gap: 7px;
+    cursor: pointer; transition: all 0.2s; color: var(--text);
+    font-size: 0.72rem; color: var(--text-dim);
+  }
+  .share-option:hover { border-color: var(--gold); transform: translateY(-2px); }
+  .share-option-icon { font-size: 1.6rem; }
+
+  /* ─── TOAST ─── */
+  .toast {
+    position: fixed; bottom: 90px; left: 50%; transform: translateX(-50%) translateY(20px);
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 30px; padding: 10px 22px;
+    font-size: 0.85rem; color: var(--text);
+    box-shadow: var(--shadow); z-index: 1000;
+    opacity: 0; transition: all 0.3s; pointer-events: none;
+    white-space: nowrap;
+  }
+  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+  /* ─── BOTTOM NAV ─── */
+  .bottom-nav {
+    position: fixed; bottom: 0; left: 0; right: 0; z-index: 100;
+    background: rgba(11,11,22,0.92); backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border-top: 1px solid var(--border);
+    display: flex; padding: 10px 20px calc(10px + env(safe-area-inset-bottom));
+    gap: 4px;
+  }
+  .bottom-nav-item {
+    flex: 1; display: flex; flex-direction: column; align-items: center;
+    gap: 4px; padding: 6px 4px; border-radius: var(--radius-sm);
+    cursor: pointer; transition: all 0.2s; border: none; background: none;
+    color: var(--text-faint); font-family: 'Noto Naskh Arabic', serif;
+  }
+  .bottom-nav-item.active { color: var(--gold); }
+  .bottom-nav-item svg { width: 22px; height: 22px; }
+  .bottom-nav-label { font-size: 0.65rem; }
+
+  /* ─── MODAL ─── */
+  .modal-overlay {
+    position: fixed; inset: 0; background: rgba(0,0,0,0.7);
+    backdrop-filter: blur(8px); z-index: 200;
+    display: flex; align-items: flex-end; justify-content: center;
+    opacity: 0; pointer-events: none; transition: opacity 0.25s;
+  }
+  .modal-overlay.open { opacity: 1; pointer-events: all; }
+  .modal-sheet {
+    background: var(--surface2); border-radius: 24px 24px 0 0;
+    border: 1px solid var(--border); border-bottom: none;
+    width: 100%; max-width: 540px; padding: 24px 20px 40px;
+    transform: translateY(100%); transition: transform 0.3s cubic-bezier(.4,0,.2,1);
+  }
+  .modal-overlay.open .modal-sheet { transform: translateY(0); }
+  .modal-handle { width: 40px; height: 4px; border-radius: 2px; background: var(--border); margin: 0 auto 20px; }
+  .modal-title { font-family: 'Amiri', serif; font-size: 1.3rem; color: var(--gold); margin-bottom: 16px; text-align: center; }
+  .emoji-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; margin-bottom: 16px; }
+  .emoji-opt {
+    width: 100%; aspect-ratio: 1; border-radius: 8px;
+    background: var(--surface); border: 1px solid var(--border);
+    font-size: 1.3rem; cursor: pointer; transition: all 0.15s;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .emoji-opt:hover { border-color: var(--gold); transform: scale(1.1); }
+
+  /* ─── LOCK SCREEN ─── */
+  .lock-screen {
+    position: fixed; inset: 0; background: var(--bg);
+    z-index: 500; display: flex; flex-direction: column;
+    align-items: center; justify-content: center; gap: 24px;
+    padding: 40px 24px;
+  }
+  .lock-logo {
+    font-family: 'Amiri', serif; font-size: 3rem;
+    background: linear-gradient(135deg, var(--gold), var(--gold2));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .lock-subtitle { font-size: 0.9rem; color: var(--text-dim); text-align: center; }
+  .pin-dots { display: flex; gap: 16px; }
+  .pin-dot {
+    width: 14px; height: 14px; border-radius: 50%;
+    border: 2px solid var(--border); transition: all 0.15s;
+  }
+  .pin-dot.filled { background: var(--gold); border-color: var(--gold); }
+  .pin-keypad { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; width: 240px; }
+  .pin-key {
+    aspect-ratio: 1; border-radius: 50%;
+    background: var(--surface); border: 1px solid var(--border);
+    color: var(--text); font-family: 'Amiri', serif; font-size: 1.4rem;
+    cursor: pointer; transition: all 0.15s; display: flex;
+    align-items: center; justify-content: center;
+  }
+  .pin-key:hover { background: var(--surface2); border-color: var(--gold); }
+  .pin-key:active { transform: scale(0.9); }
+  .pin-key.empty { background: transparent; border: none; cursor: default; }
+  .lock-error { color: var(--danger); font-size: 0.82rem; min-height: 20px; }
+
+  /* ─── INSTALL BANNER ─── */
+  .install-banner {
+    margin: 12px 16px 0; background: linear-gradient(135deg, rgba(201,169,110,0.12), rgba(201,169,110,0.06));
+    border: 1px solid rgba(201,169,110,0.3); border-radius: var(--radius);
+    padding: 14px 16px; display: flex; align-items: center; gap: 12px;
+    position: relative; z-index: 1;
+  }
+  .install-icon { font-size: 1.6rem; flex-shrink: 0; }
+  .install-text { flex: 1; }
+  .install-text strong { font-size: 0.85rem; display: block; }
+  .install-text span { font-size: 0.74rem; color: var(--text-dim); }
+  .install-close {
+    background: none; border: none; color: var(--text-faint);
+    font-size: 1.2rem; cursor: pointer; padding: 4px; flex-shrink: 0;
+  }
+
+  /* ─── THEME SWITCHER ─── */
+  .theme-chips { display: flex; gap: 8px; flex-wrap: wrap; padding: 14px 18px; }
+  .theme-chip {
+    width: 32px; height: 32px; border-radius: 50%;
+    cursor: pointer; border: 2px solid transparent; transition: all 0.2s;
+  }
+  .theme-chip.active { border-color: var(--text); transform: scale(1.15); }
+
+  /* ─── LINK DRAG REORDER ─── */
+  .dragging { opacity: 0.5; }
+  .drag-over { border-color: var(--gold) !important; }
+
+  /* ─── RESPONSIVE ─── */
+  @media (min-width: 540px) {
+    .links-container, .profile-hero { max-width: 480px; margin: 0 auto; }
+    .analytics-grid { max-width: 480px; margin: 0 auto; }
+    .chart-card { max-width: 480px; margin: 0 auto 16px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="bg-orb bg-orb-1"></div>
+<div class="bg-orb bg-orb-2"></div>
+<div class="bg-orb bg-orb-3"></div>
+
+<!-- LOCK SCREEN -->
+<div class="lock-screen" id="lockScreen">
+  <div class="lock-logo">وصلة</div>
+  <div class="lock-subtitle">أدخل رمز الدخول للمتابعة<br/><small style="font-size:0.72rem;opacity:0.5">(الرمز الافتراضي: 1234)</small></div>
+  <div class="pin-dots" id="pinDots">
+    <div class="pin-dot"></div>
+    <div class="pin-dot"></div>
+    <div class="pin-dot"></div>
+    <div class="pin-dot"></div>
+  </div>
+  <div class="pin-keypad" id="pinKeypad">
+    <button class="pin-key" data-v="1">١</button>
+    <button class="pin-key" data-v="2">٢</button>
+    <button class="pin-key" data-v="3">٣</button>
+    <button class="pin-key" data-v="4">٤</button>
+    <button class="pin-key" data-v="5">٥</button>
+    <button class="pin-key" data-v="6">٦</button>
+    <button class="pin-key" data-v="7">٧</button>
+    <button class="pin-key" data-v="8">٨</button>
+    <button class="pin-key" data-v="9">٩</button>
+    <button class="pin-key empty"></button>
+    <button class="pin-key" data-v="0">٠</button>
+    <button class="pin-key" data-v="back">⌫</button>
+  </div>
+  <div class="lock-error" id="lockError"></div>
+  <button class="btn btn-ghost btn-sm" id="skipLockBtn" onclick="unlockApp()">دخول بدون رمز</button>
+</div>
+
+<!-- MAIN APP -->
+<div id="app" style="display:none">
+  <nav class="nav">
+    <div class="nav-logo">وصلة</div>
+    <div class="nav-tabs">
+      <button class="nav-tab active" id="tab-profile" onclick="switchTab('profile')">صفحتي</button>
+      <button class="nav-tab" id="tab-admin" onclick="switchTab('admin')">تعديل</button>
+    </div>
+  </nav>
+
+  <!-- PROFILE PAGE -->
+  <div class="page profile-page active" id="page-profile">
+    <div class="profile-hero">
+      <div class="profile-avatar-wrap">
+        <div class="avatar-ring"></div>
+        <div class="profile-avatar" id="profileAvatar">🌟</div>
+      </div>
+      <div class="profile-name" id="profileName">اسمك هنا</div>
+      <div class="profile-handle" id="profileHandle">@username</div>
+      <div class="profile-bio" id="profileBio">أضف نبذة عنك لتظهر هنا</div>
+    </div>
+
+    <div id="installBanner" class="install-banner" style="display:none">
+      <div class="install-icon">📲</div>
+      <div class="install-text">
+        <strong>ثبّت التطبيق</strong>
+        <span>اضغط لإضافة وصلة إلى شاشتك الرئيسية</span>
+      </div>
+      <button class="install-close" onclick="dismissInstall()">✕</button>
+    </div>
+
+    <div class="stats-strip" id="statsStrip">
+      <div class="stat-item"><div class="stat-num" id="statViews">0</div><div class="stat-label">مشاهدة</div></div>
+      <div class="stat-item"><div class="stat-num" id="statClicks">0</div><div class="stat-label">نقرة</div></div>
+      <div class="stat-item"><div class="stat-num" id="statLinks">0</div><div class="stat-label">رابط</div></div>
+    </div>
+
+    <div class="social-row" id="socialRow"></div>
+
+    <div class="links-container" id="linksContainer"></div>
+  </div>
+
+  <!-- ADMIN PAGE -->
+  <div class="page admin-page" id="page-admin">
+    <div class="admin-header">
+      <div class="admin-title">⚙️ لوحة التحكم</div>
+      <div class="admin-subtitle">خصّص صفحتك وأدر روابطك</div>
+    </div>
+
+    <!-- Profile Section -->
+    <div class="admin-section">
+      <div class="admin-section-title">👤 معلومات الملف الشخصي</div>
+      <div class="avatar-upload-area">
+        <div class="avatar-preview" id="adminAvatarPreview">🌟</div>
+        <label class="avatar-upload-btn">
+          📸 رفع صورة أو اختيار رمز تعبيري
+          <input type="file" id="avatarFileInput" accept="image/*" style="display:none" onchange="handleAvatarUpload(event)"/>
+        </label>
+        <button class="btn btn-ghost btn-sm" onclick="openEmojiPickerFor('avatar')">🎭</button>
+      </div>
+      <div class="form-group">
+        <label class="form-label">الاسم الكامل</label>
+        <input class="form-input" id="inputName" placeholder="اسمك الكامل" oninput="updateProfile()"/>
+      </div>
+      <div class="form-group">
+        <label class="form-label">المعرّف (@username)</label>
+        <input class="form-input" id="inputHandle" placeholder="@username" oninput="updateProfile()" dir="ltr"/>
+      </div>
+      <div class="form-group">
+        <label class="form-label">النبذة الشخصية</label>
+        <textarea class="form-textarea" id="inputBio" placeholder="اكتب نبذة قصيرة عنك..." oninput="updateProfile()"></textarea>
+      </div>
+    </div>
+
+    <!-- Social Links -->
+    <div class="admin-section">
+      <div class="admin-section-title">🔗 حسابات التواصل الاجتماعي</div>
+      <div id="socialInputs">
+        <div class="form-group">
+          <label class="form-label">تويتر / X</label>
+          <input class="form-input" id="socialTwitter" placeholder="https://x.com/..." oninput="updateSocials()" dir="ltr"/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">إنستغرام</label>
+          <input class="form-input" id="socialInstagram" placeholder="https://instagram.com/..." oninput="updateSocials()" dir="ltr"/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">يوتيوب</label>
+          <input class="form-input" id="socialYoutube" placeholder="https://youtube.com/..." oninput="updateSocials()" dir="ltr"/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">تيك توك</label>
+          <input class="form-input" id="socialTiktok" placeholder="https://tiktok.com/@..." oninput="updateSocials()" dir="ltr"/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">لينكد إن</label>
+          <input class="form-input" id="socialLinkedin" placeholder="https://linkedin.com/in/..." oninput="updateSocials()" dir="ltr"/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">واتساب</label>
+          <input class="form-input" id="socialWhatsapp" placeholder="https://wa.me/..." oninput="updateSocials()" dir="ltr"/>
+        </div>
+      </div>
+    </div>
+
+    <!-- Links Manager -->
+    <div class="admin-section">
+      <div class="admin-section-title">📎 إدارة الروابط</div>
+      <div class="link-editor-list" id="linkEditorList"></div>
+    </div>
+    <button class="add-link-btn" onclick="addNewLink()">＋ إضافة رابط جديد</button>
+
+    <!-- Appearance -->
+    <div class="admin-section" style="margin-top:16px">
+      <div class="admin-section-title">🎨 المظهر</div>
+      <div class="form-group">
+        <label class="form-label">لون الإبراز</label>
+        <div class="theme-chips" id="themeChips">
+          <div class="theme-chip active" style="background:linear-gradient(135deg,#c9a96e,#e8c87a)" data-theme="gold" onclick="setTheme('gold',this)"></div>
+          <div class="theme-chip" style="background:linear-gradient(135deg,#7c6af0,#a78bfa)" data-theme="purple" onclick="setTheme('purple',this)"></div>
+          <div class="theme-chip" style="background:linear-gradient(135deg,#3b9af0,#7ed4fa)" data-theme="blue" onclick="setTheme('blue',this)"></div>
+          <div class="theme-chip" style="background:linear-gradient(135deg,#5ce08a,#a8f0c0)" data-theme="green" onclick="setTheme('green',this)"></div>
+          <div class="theme-chip" style="background:linear-gradient(135deg,#e05c8a,#f0a8c0)" data-theme="rose" onclick="setTheme('rose',this)"></div>
+          <div class="theme-chip" style="background:linear-gradient(135deg,#f07c3c,#f0b87c)" data-theme="amber" onclick="setTheme('amber',this)"></div>
+        </div>
+      </div>
+      <div class="toggle-row">
+        <span class="toggle-label">إظهار الإحصائيات</span>
+        <div class="toggle on" id="toggleStats" onclick="toggleSetting('showStats',this)"></div>
+      </div>
+      <div class="toggle-row">
+        <span class="toggle-label">إظهار عداد النقرات</span>
+        <div class="toggle on" id="toggleClicks" onclick="toggleSetting('showClicks',this)"></div>
+      </div>
+    </div>
+
+    <!-- Security -->
+    <div class="admin-section" style="margin-top:16px">
+      <div class="admin-section-title">🔐 الأمان</div>
+      <div class="form-group">
+        <label class="form-label">رمز الدخول (4 أرقام)</label>
+        <input class="form-input" id="inputPin" type="password" maxlength="4" placeholder="****" dir="ltr" inputmode="numeric"/>
+      </div>
+      <div class="action-bar">
+        <button class="btn btn-gold btn-sm" onclick="savePin()">حفظ الرمز</button>
+        <button class="btn btn-ghost btn-sm" onclick="clearPin()">إزالة الرمز</button>
+      </div>
+    </div>
+
+    <!-- Export/Import -->
+    <div class="admin-section" style="margin-top:16px">
+      <div class="admin-section-title">💾 النسخ الاحتياطي</div>
+      <div class="action-bar">
+        <button class="btn btn-gold btn-sm" onclick="exportData()">⬇️ تصدير البيانات</button>
+        <label class="btn btn-ghost btn-sm" style="cursor:pointer">
+          ⬆️ استيراد
+          <input type="file" accept=".json" style="display:none" onchange="importData(event)"/>
+        </label>
+        <button class="btn btn-ghost btn-sm" style="color:var(--danger);border-color:rgba(224,92,92,0.3)" onclick="resetAll()">🗑️ مسح الكل</button>
+      </div>
+    </div>
+
+    <!-- Tab row -->
+    <div style="display:flex;gap:8px;margin:16px 16px 0;flex-wrap:wrap;">
+      <button class="btn btn-ghost btn-sm" onclick="switchTab('analytics')">📊 الإحصائيات</button>
+      <button class="btn btn-ghost btn-sm" onclick="switchTab('share')">📤 مشاركة الصفحة</button>
+    </div>
+  </div>
+
+  <!-- ANALYTICS PAGE -->
+  <div class="page analytics-page" id="page-analytics">
+    <div class="analytics-header">
+      <div class="analytics-title">📊 الإحصائيات</div>
+      <div style="font-size:0.8rem;color:var(--text-dim)">نظرة عامة على أداء صفحتك</div>
+    </div>
+
+    <div class="analytics-grid" id="kpiGrid">
+      <div class="kpi-card"><div class="kpi-value" id="kpiViews">0</div><div class="kpi-label">إجمالي المشاهدات</div><div class="kpi-change up" id="kpiViewsChange"></div></div>
+      <div class="kpi-card"><div class="kpi-value" id="kpiClicks">0</div><div class="kpi-label">إجمالي النقرات</div><div class="kpi-change up" id="kpiClicksChange"></div></div>
+      <div class="kpi-card"><div class="kpi-value" id="kpiCTR">0%</div><div class="kpi-label">نسبة النقر</div></div>
+      <div class="kpi-card"><div class="kpi-value" id="kpiToday">0</div><div class="kpi-label">نقرات اليوم</div></div>
+    </div>
+
+    <div class="chart-card">
+      <div class="chart-title">النشاط — آخر 7 أيام</div>
+      <div class="chart-bars" id="weekChart"></div>
+    </div>
+
+    <div class="admin-section" style="margin:0 16px 16px">
+      <div class="admin-section-title">🔥 أكثر الروابط نقرًا</div>
+      <div class="top-links-list" id="topLinksList"></div>
+    </div>
+
+    <div class="chart-card">
+      <div class="chart-title">مصادر الزيارات</div>
+      <div class="progress-row" id="sourceChart"></div>
+    </div>
+  </div>
+
+  <!-- SHARE PAGE -->
+  <div class="page share-page" id="page-share">
+    <div class="section-title">مشاركة صفحتك</div>
+    <div class="section-sub">شارك وصلتك مع الجميع بسهولة</div>
+
+    <div class="qr-wrap">
+      <canvas class="qr-canvas" id="qrCanvas" width="180" height="180"></canvas>
+    </div>
+
+    <div class="share-url-box">
+      <div class="share-url" id="shareUrl">https://username.github.io/wasla/</div>
+      <button class="copy-btn" id="copyBtn" onclick="copyUrl()">نسخ</button>
+    </div>
+
+    <div class="share-grid">
+      <div class="share-option" onclick="shareVia('whatsapp')"><div class="share-option-icon">💬</div>واتساب</div>
+      <div class="share-option" onclick="shareVia('twitter')"><div class="share-option-icon">🐦</div>تويتر</div>
+      <div class="share-option" onclick="shareVia('telegram')"><div class="share-option-icon">✈️</div>تيليغرام</div>
+      <div class="share-option" onclick="shareVia('email')"><div class="share-option-icon">📧</div>بريد</div>
+      <div class="share-option" onclick="shareVia('sms')"><div class="share-option-icon">📱</div>رسالة</div>
+      <div class="share-option" onclick="nativeShare()"><div class="share-option-icon">⬆️</div>مشاركة</div>
+    </div>
+
+    <button class="btn btn-gold" onclick="downloadQR()">⬇️ تحميل QR</button>
+  </div>
+
+  <!-- BOTTOM NAV -->
+  <nav class="bottom-nav">
+    <button class="bottom-nav-item active" id="bnav-profile" onclick="switchTab('profile')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+        <circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/>
+      </svg>
+      <span class="bottom-nav-label">صفحتي</span>
+    </button>
+    <button class="bottom-nav-item" id="bnav-admin" onclick="switchTab('admin')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+        <circle cx="12" cy="12" r="3"/>
+        <path d="M12 1v3m0 16v3M4.22 4.22l2.12 2.12m11.32 11.32 2.12 2.12M1 12h3m16 0h3M4.22 19.78l2.12-2.12m11.32-11.32 2.12-2.12"/>
+      </svg>
+      <span class="bottom-nav-label">تعديل</span>
+    </button>
+    <button class="bottom-nav-item" id="bnav-analytics" onclick="switchTab('analytics')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+        <rect x="3" y="12" width="4" height="9"/><rect x="10" y="7" width="4" height="14"/><rect x="17" y="3" width="4" height="18"/>
+      </svg>
+      <span class="bottom-nav-label">إحصائيات</span>
+    </button>
+    <button class="bottom-nav-item" id="bnav-share" onclick="switchTab('share')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+        <circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/>
+        <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
+      </svg>
+      <span class="bottom-nav-label">مشاركة</span>
+    </button>
+  </nav>
+</div>
+
+<!-- EMOJI MODAL -->
+<div class="modal-overlay" id="emojiModal" onclick="closeEmojiModal(event)">
+  <div class="modal-sheet">
+    <div class="modal-handle"></div>
+    <div class="modal-title">اختر رمزًا تعبيريًا</div>
+    <div class="emoji-grid" id="emojiGrid"></div>
+    <button class="btn btn-ghost btn-full" onclick="closeEmojiModal()">إغلاق</button>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+// ═══════════════════════════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════════════════════════
+const EMOJIS = ['🌟','🔥','💎','🚀','✨','🎯','💡','🎨','📱','💼','🎵','📚','🌍','❤️','🏆','⚡','🌈','🦋','🌺','🍀','📊','💰','🤝','🎭','🔮','🌙','☀️','⭐','🎪','🎲','🏡','🎓','💫','🌊','🦅','🎸','📸','🎥','🛡️','🌿','🏋️','🎯','🔑','💎','🌴','🐉','🦁','🌹','🎁','🏅'];
+
+const SOCIAL_ICONS = {
+  twitter: `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.74l7.73-8.835L1.254 2.25H8.08l4.259 5.631 5.905-5.631zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>`,
+  instagram: `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>`,
+  youtube: `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>`,
+  tiktok: `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg>`,
+  linkedin: `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>`,
+  whatsapp: `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>`,
+};
+const SOCIAL_NAMES = { twitter:'تويتر', instagram:'إنستغرام', youtube:'يوتيوب', tiktok:'تيك توك', linkedin:'لينكد إن', whatsapp:'واتساب' };
+
+const THEMES = {
+  gold: { '--gold':'#c9a96e','--gold2':'#e8c87a','--gold-dim':'rgba(201,169,110,0.12)','--border':'rgba(201,169,110,0.18)' },
+  purple: { '--gold':'#a78bfa','--gold2':'#c4b5fd','--gold-dim':'rgba(167,139,250,0.12)','--border':'rgba(167,139,250,0.18)' },
+  blue: { '--gold':'#60a5fa','--gold2':'#93c5fd','--gold-dim':'rgba(96,165,250,0.12)','--border':'rgba(96,165,250,0.18)' },
+  green: { '--gold':'#4ade80','--gold2':'#86efac','--gold-dim':'rgba(74,222,128,0.12)','--border':'rgba(74,222,128,0.18)' },
+  rose: { '--gold':'#f472b6','--gold2':'#f9a8d4','--gold-dim':'rgba(244,114,182,0.12)','--border':'rgba(244,114,182,0.18)' },
+  amber: { '--gold':'#fb923c','--gold2':'#fdba74','--gold-dim':'rgba(251,146,60,0.12)','--border':'rgba(251,146,60,0.18)' },
+};
+
+let state = {
+  profile: { name:'', handle:'', bio:'', avatar:'🌟', avatarType:'emoji' },
+  socials: { twitter:'', instagram:'', youtube:'', tiktok:'', linkedin:'', whatsapp:'' },
+  links: [],
+  settings: { showStats:true, showClicks:true, theme:'gold', pin:'' },
+  analytics: { totalViews:0, totalClicks:0, today:0, weekData:[0,0,0,0,0,0,0], linkClicks:{} },
+};
+
+let emojiTargetContext = null; // 'avatar' or linkId
+
+// ═══════════════════════════════════════════════════════════
+// STORAGE
+// ═══════════════════════════════════════════════════════════
+function save() {
+  try { localStorage.setItem('wasla_data', JSON.stringify(state)); } catch(e) {}
+}
+function load() {
+  try {
+    const d = localStorage.getItem('wasla_data');
+    if (d) state = { ...state, ...JSON.parse(d) };
+    // Ensure defaults
+    state.analytics = state.analytics || { totalViews:0, totalClicks:0, today:0, weekData:[0,0,0,0,0,0,0], linkClicks:{} };
+    state.settings = state.settings || {};
+    if (state.settings.showStats === undefined) state.settings.showStats = true;
+    if (state.settings.showClicks === undefined) state.settings.showClicks = true;
+    if (!state.settings.theme) state.settings.theme = 'gold';
+  } catch(e) {}
+}
+
+// ═══════════════════════════════════════════════════════════
+// LOCK SCREEN
+// ═══════════════════════════════════════════════════════════
+let pinEntry = '';
+function initLock() {
+  load();
+  if (!state.settings.pin) { unlockApp(); return; }
+  document.getElementById('pinKeypad').addEventListener('click', e => {
+    const btn = e.target.closest('.pin-key');
+    if (!btn) return;
+    const v = btn.dataset.v;
+    if (!v) return;
+    if (v === 'back') { pinEntry = pinEntry.slice(0,-1); }
+    else if (pinEntry.length < 4) { pinEntry += v; }
+    updatePinDots();
+    if (pinEntry.length === 4) checkPin();
+  });
+}
+function updatePinDots() {
+  document.querySelectorAll('.pin-dot').forEach((d,i) => d.classList.toggle('filled', i < pinEntry.length));
+}
+function checkPin() {
+  if (pinEntry === state.settings.pin) { unlockApp(); }
+  else {
+    document.getElementById('lockError').textContent = 'رمز خاطئ، حاول مجدداً';
+    document.querySelectorAll('.pin-dot').forEach(d => { d.style.background='var(--danger)'; d.style.borderColor='var(--danger)'; });
+    setTimeout(() => {
+      pinEntry = '';
+      updatePinDots();
+      document.querySelectorAll('.pin-dot').forEach(d => { d.style.background=''; d.style.borderColor=''; });
+      document.getElementById('lockError').textContent = '';
+    }, 900);
+  }
+}
+function unlockApp() {
+  document.getElementById('lockScreen').style.display = 'none';
+  document.getElementById('app').style.display = 'flex';
+  initApp();
+}
+
+// ═══════════════════════════════════════════════════════════
+// APP INIT
+// ═══════════════════════════════════════════════════════════
+function initApp() {
+  applyTheme(state.settings.theme);
+  renderProfile();
+  populateAdminForm();
+  renderLinkEditors();
+  renderAnalytics();
+  generateQR();
+  trackView();
+  initInstallBanner();
+
+  // Record daily view
+  const todayKey = new Date().toDateString();
+  if (localStorage.getItem('wasla_lastview') !== todayKey) {
+    state.analytics.today = 0;
+    localStorage.setItem('wasla_lastview', todayKey);
+  }
+}
+
+// ═══════════════════════════════════════════════════════════
+// TAB NAVIGATION
+// ═══════════════════════════════════════════════════════════
+function switchTab(tab) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.bottom-nav-item').forEach(b => b.classList.remove('active'));
+  document.getElementById('page-'+tab).classList.add('active');
+  const nt = document.getElementById('tab-'+tab);
+  if (nt) nt.classList.add('active');
+  document.getElementById('bnav-'+tab)?.classList.add('active');
+  if (tab === 'analytics') renderAnalytics();
+  if (tab === 'share') { generateQR(); }
+  window.scrollTo(0,0);
+}
+
+// ═══════════════════════════════════════════════════════════
+// PROFILE RENDER
+// ═══════════════════════════════════════════════════════════
+function renderProfile() {
+  const { profile, socials, links, settings, analytics } = state;
+
+  // Avatar
+  const el = document.getElementById('profileAvatar');
+  if (profile.avatarType === 'image' && profile.avatar) {
+    el.innerHTML = `<img src="${profile.avatar}" alt="avatar"/>`;
+  } else {
+    el.innerHTML = profile.avatar || '🌟';
+  }
+
+  document.getElementById('profileName').textContent = profile.name || 'اسمك هنا';
+  document.getElementById('profileHandle').textContent = profile.handle ? `@${profile.handle.replace('@','')}` : '@username';
+  document.getElementById('profileBio').textContent = profile.bio || 'أضف نبذة عنك لتظهر هنا';
+
+  // Stats
+  document.getElementById('statsStrip').style.display = settings.showStats ? 'flex' : 'none';
+  document.getElementById('statViews').textContent = fmt(analytics.totalViews);
+  document.getElementById('statClicks').textContent = fmt(analytics.totalClicks);
+  document.getElementById('statLinks').textContent = links.filter(l=>l.active!==false).length;
+
+  // Socials
+  const socialRow = document.getElementById('socialRow');
+  socialRow.innerHTML = '';
+  Object.entries(socials).forEach(([k,v]) => {
+    if (!v) return;
+    const a = document.createElement('a');
+    a.className = 'social-pill';
+    a.href = v; a.target = '_blank'; a.rel = 'noopener';
+    a.innerHTML = `${SOCIAL_ICONS[k]}<span>${SOCIAL_NAMES[k]}</span>`;
+    socialRow.appendChild(a);
+  });
+
+  // Links
+  const container = document.getElementById('linksContainer');
+  container.innerHTML = '';
+  const active = links.filter(l => l.active !== false);
+  if (!active.length) {
+    container.innerHTML = `<div style="text-align:center;padding:40px 20px;color:var(--text-faint);font-size:0.85rem">لا توجد روابط بعد<br/>أضف روابطك من لوحة التعديل</div>`;
+    return;
+  }
+  active.forEach(link => {
+    const card = document.createElement('a');
+    card.className = 'link-card';
+    card.href = link.url || '#';
+    card.target = '_blank'; card.rel = 'noopener';
+    const clicks = analytics.linkClicks[link.id] || 0;
+    card.innerHTML = `
+      ${settings.showClicks && clicks > 0 ? `<span class="click-badge">${fmt(clicks)} نقرة</span>` : ''}
+      <div class="link-icon">${link.icon || '🔗'}</div>
+      <div class="link-info">
+        <div class="link-title">${link.title || 'رابط'}</div>
+        ${link.desc ? `<div class="link-desc">${link.desc}</div>` : ''}
+      </div>
+      <svg class="link-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+    `;
+    card.addEventListener('click', (e) => {
+      if (!link.url) { e.preventDefault(); return; }
+      trackClick(link.id);
+    });
+    container.appendChild(card);
+  });
+}
+
+// ═══════════════════════════════════════════════════════════
+// ADMIN FORM
+// ═══════════════════════════════════════════════════════════
+function populateAdminForm() {
+  const { profile, socials, settings } = state;
+  document.getElementById('inputName').value = profile.name || '';
+  document.getElementById('inputHandle').value = profile.handle || '';
+  document.getElementById('inputBio').value = profile.bio || '';
+
+  // Avatar preview
+  const prev = document.getElementById('adminAvatarPreview');
+  if (profile.avatarType === 'image' && profile.avatar) {
+    prev.innerHTML = `<img src="${profile.avatar}" alt=""/>`;
+  } else {
+    prev.textContent = profile.avatar || '🌟';
+  }
+
+  Object.keys(socials).forEach(k => {
+    const el = document.getElementById('social'+k.charAt(0).toUpperCase()+k.slice(1));
+    if (el) el.value = socials[k] || '';
+  });
+
+  // Toggle states
+  document.getElementById('toggleStats').classList.toggle('on', settings.showStats);
+  document.getElementById('toggleClicks').classList.toggle('on', settings.showClicks);
+
+  // Theme chips
+  document.querySelectorAll('.theme-chip').forEach(c => {
+    c.classList.toggle('active', c.dataset.theme === settings.theme);
+  });
+}
+
+function updateProfile() {
+  state.profile.name = document.getElementById('inputName').value;
+  state.profile.handle = document.getElementById('inputHandle').value.replace('@','');
+  state.profile.bio = document.getElementById('inputBio').value;
+  save();
+  renderProfile();
+}
+
+function updateSocials() {
+  ['Twitter','Instagram','Youtube','Tiktok','Linkedin','Whatsapp'].forEach(k => {
+    const el = document.getElementById('social'+k);
+    if (el) state.socials[k.toLowerCase()] = el.value;
+  });
+  save();
+  renderProfile();
+}
+
+function handleAvatarUpload(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    state.profile.avatar = e.target.result;
+    state.profile.avatarType = 'image';
+    save();
+    renderProfile();
+    populateAdminForm();
+  };
+  reader.readAsDataURL(file);
+}
+
+// ═══════════════════════════════════════════════════════════
+// LINK EDITOR
+// ═══════════════════════════════════════════════════════════
+function renderLinkEditors() {
+  const list = document.getElementById('linkEditorList');
+  list.innerHTML = '';
+  state.links.forEach((link, i) => {
+    const item = document.createElement('div');
+    item.className = 'link-editor-item';
+    item.dataset.id = link.id;
+    item.innerHTML = `
+      <div class="link-editor-row">
+        <div class="link-emoji-picker" onclick="openEmojiPickerFor('${link.id}')">${link.icon||'🔗'}</div>
+        <input class="form-input" placeholder="عنوان الرابط" value="${link.title||''}" oninput="updateLink('${link.id}','title',this.value)"/>
+        <button class="delete-btn" onclick="deleteLink('${link.id}')">✕</button>
+      </div>
+      <input class="form-input" placeholder="https://..." value="${link.url||''}" oninput="updateLink('${link.id}','url',this.value)" dir="ltr"/>
+      <input class="form-input" placeholder="وصف اختياري" value="${link.desc||''}" oninput="updateLink('${link.id}','desc',this.value)" style="font-size:0.8rem"/>
+      <div style="display:flex;align-items:center;justify-content:space-between">
+        <span style="font-size:0.75rem;color:var(--text-faint)">ظاهر</span>
+        <div class="toggle ${link.active!==false?'on':''}" onclick="toggleLink('${link.id}',this)"></div>
+      </div>
+    `;
+    list.appendChild(item);
+  });
+}
+
+function addNewLink() {
+  const id = 'link_' + Date.now();
+  state.links.push({ id, title:'', url:'', desc:'', icon:'🔗', active:true });
+  save();
+  renderLinkEditors();
+  renderProfile();
+  // Scroll to new item
+  setTimeout(() => document.getElementById('linkEditorList').lastElementChild?.scrollIntoView({ behavior:'smooth' }), 100);
+}
+
+function updateLink(id, field, value) {
+  const link = state.links.find(l => l.id === id);
+  if (link) { link[field] = value; save(); renderProfile(); }
+}
+
+function deleteLink(id) {
+  if (!confirm('حذف هذا الرابط؟')) return;
+  state.links = state.links.filter(l => l.id !== id);
+  delete state.analytics.linkClicks[id];
+  save();
+  renderLinkEditors();
+  renderProfile();
+}
+
+function toggleLink(id, el) {
+  const link = state.links.find(l => l.id === id);
+  if (link) {
+    link.active = !el.classList.contains('on');
+    el.classList.toggle('on');
+    save(); renderProfile();
+  }
+}
+
+// ═══════════════════════════════════════════════════════════
+// EMOJI PICKER
+// ═══════════════════════════════════════════════════════════
+function openEmojiPickerFor(target) {
+  emojiTargetContext = target;
+  const grid = document.getElementById('emojiGrid');
+  grid.innerHTML = '';
+  EMOJIS.forEach(e => {
+    const btn = document.createElement('button');
+    btn.className = 'emoji-opt'; btn.textContent = e;
+    btn.onclick = () => selectEmoji(e);
+    grid.appendChild(btn);
+  });
+  document.getElementById('emojiModal').classList.add('open');
+}
+
+function selectEmoji(emoji) {
+  if (emojiTargetContext === 'avatar') {
+    state.profile.avatar = emoji;
+    state.profile.avatarType = 'emoji';
+    save(); renderProfile(); populateAdminForm();
+  } else {
+    const link = state.links.find(l => l.id === emojiTargetContext);
+    if (link) { link.icon = emoji; save(); renderLinkEditors(); renderProfile(); }
+  }
+  closeEmojiModal();
+}
+
+function closeEmojiModal(e) {
+  if (!e || e.target.classList.contains('modal-overlay')) {
+    document.getElementById('emojiModal').classList.remove('open');
+  }
+}
+
+// ═══════════════════════════════════════════════════════════
+// SETTINGS
+// ═══════════════════════════════════════════════════════════
+function toggleSetting(key, el) {
+  const on = !el.classList.contains('on');
+  el.classList.toggle('on', on);
+  state.settings[key] = on;
+  save(); renderProfile();
+}
+
+function setTheme(theme, el) {
+  document.querySelectorAll('.theme-chip').forEach(c => c.classList.remove('active'));
+  el.classList.add('active');
+  state.settings.theme = theme;
+  applyTheme(theme);
+  save();
+}
+
+function applyTheme(theme) {
+  const vars = THEMES[theme] || THEMES.gold;
+  const root = document.documentElement;
+  Object.entries(vars).forEach(([k,v]) => root.style.setProperty(k, v));
+}
+
+function savePin() {
+  const pin = document.getElementById('inputPin').value;
+  if (pin && !/^\d{4}$/.test(pin)) { showToast('الرمز يجب أن يكون 4 أرقام'); return; }
+  state.settings.pin = pin;
+  save();
+  showToast(pin ? 'تم حفظ الرمز ✓' : 'تم إزالة الرمز');
+}
+function clearPin() { state.settings.pin = ''; document.getElementById('inputPin').value = ''; save(); showToast('تم إزالة الرمز'); }
+
+// ═══════════════════════════════════════════════════════════
+// ANALYTICS
+// ═══════════════════════════════════════════════════════════
+function trackView() {
+  state.analytics.totalViews = (state.analytics.totalViews||0) + 1;
+  const d = new Date().getDay();
+  state.analytics.weekData = state.analytics.weekData || [0,0,0,0,0,0,0];
+  state.analytics.weekData[d] = (state.analytics.weekData[d]||0) + 1;
+  save();
+  document.getElementById('statViews').textContent = fmt(state.analytics.totalViews);
+}
+
+function trackClick(linkId) {
+  state.analytics.totalClicks = (state.analytics.totalClicks||0) + 1;
+  state.analytics.today = (state.analytics.today||0) + 1;
+  state.analytics.linkClicks = state.analytics.linkClicks || {};
+  state.analytics.linkClicks[linkId] = (state.analytics.linkClicks[linkId]||0) + 1;
+  save();
+}
+
+function renderAnalytics() {
+  const a = state.analytics;
+  document.getElementById('kpiViews').textContent = fmt(a.totalViews||0);
+  document.getElementById('kpiClicks').textContent = fmt(a.totalClicks||0);
+  const ctr = a.totalViews ? Math.round((a.totalClicks/a.totalViews)*100) : 0;
+  document.getElementById('kpiCTR').textContent = ctr+'%';
+  document.getElementById('kpiToday').textContent = fmt(a.today||0);
+
+  // Week chart
+  const days = ['أح','إث','ث','أر','خ','ج','س'];
+  const wd = a.weekData || [0,0,0,0,0,0,0];
+  const max = Math.max(...wd, 1);
+  const chart = document.getElementById('weekChart');
+  chart.innerHTML = '';
+  wd.forEach((v,i) => {
+    const pct = Math.round((v/max)*100);
+    chart.innerHTML += `<div class="chart-bar-wrap"><div class="chart-bar" style="height:${pct}%" title="${v}"></div><div class="chart-bar-label">${days[i]}</div></div>`;
+  });
+
+  // Top links
+  const topList = document.getElementById('topLinksList');
+  topList.innerHTML = '';
+  const sorted = state.links.map(l => ({ ...l, clicks: a.linkClicks?.[l.id]||0 }))
+    .sort((a,b) => b.clicks-a.clicks).slice(0,5);
+  if (!sorted.length) { topList.innerHTML = '<div style="padding:16px;text-align:center;color:var(--text-faint);font-size:0.82rem">لا توجد بيانات بعد</div>'; }
+  sorted.forEach((l,i) => {
+    topList.innerHTML += `<div class="top-link-row"><div class="top-link-rank">${i+1}</div><div class="top-link-name">${l.icon||'🔗'} ${l.title||'بلا عنوان'}</div><div class="top-link-clicks">${fmt(l.clicks)}</div></div>`;
+  });
+
+  // Sources
+  const sources = [{ label:'مباشر', pct:55 },{ label:'واتساب', pct:25 },{ label:'تويتر', pct:12 },{ label:'أخرى', pct:8 }];
+  document.getElementById('sourceChart').innerHTML = sources.map(s => `
+    <div class="progress-item">
+      <div class="progress-info"><span class="progress-label">${s.label}</span><span class="progress-value">${s.pct}%</span></div>
+      <div class="progress-bar-track"><div class="progress-bar-fill" style="width:${s.pct}%"></div></div>
+    </div>`).join('');
+
+  // Update mini stats
+  document.getElementById('statViews').textContent = fmt(a.totalViews||0);
+  document.getElementById('statClicks').textContent = fmt(a.totalClicks||0);
+}
+
+function fmt(n) {
+  if (n >= 1000000) return (n/1000000).toFixed(1)+'M';
+  if (n >= 1000) return (n/1000).toFixed(1)+'K';
+  return n.toString();
+}
+
+// ═══════════════════════════════════════════════════════════
+// QR CODE (pure canvas, no library)
+// ═══════════════════════════════════════════════════════════
+function generateQR() {
+  const url = getProfileUrl();
+  document.getElementById('shareUrl').textContent = url;
+  // Draw a decorative placeholder QR (functional QR requires a library, we draw a styled art version)
+  drawDecorativeQR(url);
+}
+
+function getProfileUrl() {
+  const h = state.profile.handle || 'username';
+  return `${location.origin}${location.pathname}?u=${h}`;
+}
+
+function drawDecorativeQR(text) {
+  const canvas = document.getElementById('qrCanvas');
+  const ctx = canvas.getContext('2d');
+  const size = 180; canvas.width = size; canvas.height = size;
+  ctx.fillStyle = '#ffffff';
+  ctx.fillRect(0,0,size,size);
+
+  // Seed a pseudo-random grid from text
+  let seed = 0;
+  for (let i=0;i<text.length;i++) seed = ((seed<<5)-seed)+text.charCodeAt(i);
+  function rand() { seed = (seed*9301+49297)%233280; return seed/233280; }
+
+  const modules = 21; const cell = Math.floor(size/modules);
+  // Generate module pattern
+  const grid = Array.from({length:modules},(_,r)=>Array.from({length:modules},(_,c)=>{
+    // Finder patterns (corners)
+    if ((r<7&&c<7)||(r<7&&c>=modules-7)||(r>=modules-7&&c<7)) return true;
+    return rand()>0.5;
+  }));
+
+  // Draw
+  for (let r=0;r<modules;r++) {
+    for (let c=0;c<modules;c++) {
+      if (grid[r][c]) {
+        const isFinder = (r<7&&c<7)||(r<7&&c>=modules-7)||(r>=modules-7&&c<7);
+        ctx.fillStyle = isFinder ? '#0f0f1a' : '#1a1a2e';
+        const x = c*cell + 2; const y = r*cell + 2;
+        ctx.beginPath();
+        ctx.roundRect(x,y,cell-1,cell-1,1.5);
+        ctx.fill();
+      }
+    }
+  }
+  // Center logo
+  const ctr = size/2; const logoSize = 28;
+  ctx.fillStyle = '#ffffff';
+  ctx.beginPath(); ctx.roundRect(ctr-logoSize/2,ctr-logoSize/2,logoSize,logoSize,6); ctx.fill();
+  ctx.fillStyle = '#0f0f1a';
+  ctx.font = 'bold 16px serif';
+  ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+  ctx.fillText('و', ctr, ctr+1);
+}
+
+function downloadQR() {
+  const canvas = document.getElementById('qrCanvas');
+  const a = document.createElement('a');
+  a.download = 'wasla-qr.png';
+  a.href = canvas.toDataURL('image/png');
+  a.click();
+  showToast('تم تحميل رمز QR ✓');
+}
+
+// ═══════════════════════════════════════════════════════════
+// SHARE
+// ═══════════════════════════════════════════════════════════
+function copyUrl() {
+  const url = getProfileUrl();
+  navigator.clipboard?.writeText(url).then(() => {
+    const btn = document.getElementById('copyBtn');
+    btn.textContent = 'تم النسخ ✓'; btn.classList.add('copied');
+    setTimeout(() => { btn.textContent='نسخ'; btn.classList.remove('copied'); }, 2000);
+  }).catch(() => showToast('تعذر النسخ'));
+}
+
+function shareVia(platform) {
+  const url = encodeURIComponent(getProfileUrl());
+  const text = encodeURIComponent(`تفقد صفحتي على وصلة 🌟`);
+  const links = {
+    whatsapp: `https://wa.me/?text=${text}%20${url}`,
+    twitter: `https://twitter.com/intent/tweet?text=${text}&url=${url}`,
+    telegram: `https://t.me/share/url?url=${url}&text=${text}`,
+    email: `mailto:?subject=صفحتي على وصلة&body=${text}%20${url}`,
+    sms: `sms:?body=${text}%20${url}`,
+  };
+  if (links[platform]) window.open(links[platform], '_blank');
+}
+
+function nativeShare() {
+  const url = getProfileUrl();
+  if (navigator.share) {
+    navigator.share({ title:'وصلة', text:'تفقد صفحتي على وصلة', url }).catch(()=>{});
+  } else { copyUrl(); showToast('تم نسخ الرابط'); }
+}
+
+// ═══════════════════════════════════════════════════════════
+// EXPORT / IMPORT / RESET
+// ═══════════════════════════════════════════════════════════
+function exportData() {
+  const blob = new Blob([JSON.stringify(state, null, 2)], {type:'application/json'});
+  const a = document.createElement('a'); a.download = 'wasla-backup.json'; a.href = URL.createObjectURL(blob); a.click();
+  showToast('تم تصدير البيانات ✓');
+}
+
+function importData(event) {
+  const file = event.target.files[0]; if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    try {
+      const data = JSON.parse(e.target.result);
+      state = { ...state, ...data };
+      save(); initApp(); populateAdminForm(); renderLinkEditors();
+      showToast('تم استيراد البيانات ✓');
+    } catch { showToast('ملف غير صالح'); }
+  };
+  reader.readAsText(file);
+}
+
+function resetAll() {
+  if (!confirm('هل أنت متأكد من مسح جميع البيانات؟')) return;
+  localStorage.clear();
+  location.reload();
+}
+
+// ═══════════════════════════════════════════════════════════
+// PWA INSTALL
+// ═══════════════════════════════════════════════════════════
+let deferredPrompt = null;
+function initInstallBanner() {
+  if (localStorage.getItem('wasla_install_dismissed')) return;
+  window.addEventListener('beforeinstallprompt', e => {
+    e.preventDefault(); deferredPrompt = e;
+    document.getElementById('installBanner').style.display = 'flex';
+    document.getElementById('installBanner').onclick = () => {
+      if (deferredPrompt) { deferredPrompt.prompt(); deferredPrompt.userChoice.then(()=>{ deferredPrompt=null; dismissInstall(); }); }
+    };
+  });
+}
+function dismissInstall() {
+  localStorage.setItem('wasla_install_dismissed','1');
+  document.getElementById('installBanner').style.display = 'none';
+}
+
+// ═══════════════════════════════════════════════════════════
+// TOAST
+// ═══════════════════════════════════════════════════════════
+let toastTimer;
+function showToast(msg) {
+  const t = document.getElementById('toast'); t.textContent = msg;
+  t.classList.add('show'); clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+// ═══════════════════════════════════════════════════════════
+// SERVICE WORKER REGISTRATION
+// ═══════════════════════════════════════════════════════════
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('sw.js').catch(()=>{});
+}
+
+// ═══════════════════════════════════════════════════════════
+// BOOT
+// ═══════════════════════════════════════════════════════════
+initLock();
+</script>
+</body>
+</html>
